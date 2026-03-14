@@ -693,6 +693,7 @@ input.date-input:focus{border-color:#3b82f6}
     <div class="nav-item" data-v="map" onclick="showView('map')"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>Carte Mondiale<span class="nav-badge" style="background:#064e3b;color:#6ee7b7" id="nb-countries">155</span></div>
     <div class="nav-item" data-v="pipeline" onclick="showView('pipeline')"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Pipeline<span class="nav-badge nb-orange" id="nb-prio">—</span></div>
     <div class="nav-item" data-v="contacts" onclick="showView('contacts')"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>Contacts<span class="nav-badge nb-green" id="nb-contacts">7 880</span></div>
+    <div class="nav-item" data-v="scraping" onclick="showView('scraping')"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07M8.46 8.46a5 5 0 0 0 0 7.07"/></svg>Scraping</div>
   </nav>
       <div class="nav-sec" style="margin-top:8px">Ressources</div>
     <div class="nav-item" data-v="technologies" onclick="showView('technologies')"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07M8.46 8.46a5 5 0 0 0 0 7.07"/></svg>Technologies</div>
@@ -810,6 +811,39 @@ input.date-input:focus{border-color:#3b82f6}
       </div>
       <div class="contacts-grid" id="contacts-grid"></div>
       <div class="pagination" id="contacts-pagination"></div>
+    </div>
+
+    <div id="view-scraping" class="view">
+      <div style="max-width:860px">
+        <div style="margin-bottom:24px">
+          <h2 style="font-size:18px;font-weight:700;color:#e2e8f0;margin-bottom:4px">🔍 Module Scraping</h2>
+          <p style="font-size:12px;color:#64748b">Enrichissement automatique des fiches entreprises depuis des sources externes.</p>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px">
+          <div style="background:#1e293b;border:1px solid #334155;border-radius:10px;padding:20px">
+            <div style="font-size:22px;margin-bottom:10px">🌐</div>
+            <div style="font-weight:700;color:#e2e8f0;font-size:13px;margin-bottom:6px">Web scraping</div>
+            <div style="font-size:11px;color:#64748b;margin-bottom:14px">Extraction automatique depuis les sites web des entreprises.</div>
+            <button class="btn btn-primary btn-sm" onclick="runScrape('web')" style="width:100%">Lancer</button>
+          </div>
+          <div style="background:#1e293b;border:1px solid #334155;border-radius:10px;padding:20px">
+            <div style="font-size:22px;margin-bottom:10px">🔗</div>
+            <div style="font-weight:700;color:#e2e8f0;font-size:13px;margin-bottom:6px">LinkedIn</div>
+            <div style="font-size:11px;color:#64748b;margin-bottom:14px">Recherche de contacts et d'informations via LinkedIn.</div>
+            <button class="btn btn-primary btn-sm" onclick="runScrape('linkedin')" style="width:100%">Lancer</button>
+          </div>
+          <div style="background:#1e293b;border:1px solid #334155;border-radius:10px;padding:20px">
+            <div style="font-size:22px;margin-bottom:10px">📋</div>
+            <div style="font-weight:700;color:#e2e8f0;font-size:13px;margin-bottom:6px">Annuaires</div>
+            <div style="font-size:11px;color:#64748b;margin-bottom:14px">Enrichissement depuis les annuaires professionnels.</div>
+            <button class="btn btn-primary btn-sm" onclick="runScrape('directory')" style="width:100%">Lancer</button>
+          </div>
+        </div>
+        <div style="margin-top:24px;background:#1e293b;border:1px solid #334155;border-radius:10px;padding:20px">
+          <div style="font-weight:700;color:#94a3b8;font-size:11px;text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px">Journal des opérations</div>
+          <div id="scraping-log" style="font-size:11px;color:#475569;font-family:monospace">Aucune opération lancée.</div>
+        </div>
+      </div>
     </div>
 
     <div id="view-supabase" class="view">
@@ -1344,6 +1378,7 @@ const VIEWS = {
   map:'Carte Mondiale',
   pipeline:'Pipeline',
   contacts:'Contacts',
+  scraping:'Scraping',
   technologies:'Technologies',
   supabase:'Supabase'
 };
@@ -4796,6 +4831,35 @@ document.getElementById("current-user").textContent =
     const el = document.getElementById('login-password');
     if (el) el.type = el.type === 'password' ? 'text' : 'password';
   };
+// ─── SCRAPING MODULE ─────────────────────────────────────────────────────────
+window.runScrape = async function(source) {
+  try {
+    const token = sessionStorage.getItem('sb_access_token');
+    if (!token) throw new Error('Session Supabase introuvable');
+    const response = await fetch(
+      `${SUPABASE_URL}/functions/v1/scrape-source`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ source_code: source })
+      }
+    );
+    const result = await response.json();
+    console.log('Scraping result:', result);
+    if (result.success) {
+      alert(`Scraping terminé : ${result.inserted} entreprises trouvées`);
+    } else {
+      alert('Erreur scraping : ' + (result.error || 'unknown error'));
+    }
+  } catch (e) {
+    console.error('runScrape error:', e);
+    alert('Erreur scraping : ' + e.message);
+  }
+};
+
 })();
 </script>
 
