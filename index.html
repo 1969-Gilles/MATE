@@ -1046,6 +1046,81 @@ function n2a3(id){ return ISO_NUM[String(id)] || null; }
 function nameToISO(n){ return COUNTRY_ISO[n] || null; }
 function isoToName(iso){ for(const[k,v] of Object.entries(COUNTRY_ISO)) if(v===iso) return k; return null; }
 
+// ── COUNTRY ISO-3 RESOLUTION ──────────────────────────────────────────────────
+// Case-insensitive cache built from COUNTRY_ISO (runs once at startup)
+const _COUNTRY_ISO_LC = Object.fromEntries(
+  Object.entries(COUNTRY_ISO).map(([k,v])=>[k.toLowerCase().trim(),v])
+);
+// Extra synonyms: uppercase/abbreviated/accent-stripped variants not in COUNTRY_ISO
+const _COUNTRY_SYNONYMS = {
+  // Algeria
+  'algerie':'DZA','algeria':'DZA','algérie':'DZA',
+  // France
+  'france':'FRA',
+  // Germany
+  'germany':'DEU','allemagne':'DEU',
+  // Spain
+  'spain':'ESP','espagne':'ESP',
+  // United Kingdom
+  'uk':'GBR','united kingdom':'GBR','grande-bretagne':'GBR','royaume-uni':'GBR','great britain':'GBR',
+  // United States
+  'usa':'USA','us':'USA','etats-unis':'USA','états-unis':'USA','united states':'USA','etats-unis / usa':'USA',
+  // Morocco
+  'morocco':'MAR','maroc':'MAR',
+  // Tunisia
+  'tunisia':'TUN','tunisie':'TUN',
+  // Italy
+  'italy':'ITA','italie':'ITA',
+  // Belgium
+  'belgium':'BEL','belgique':'BEL',
+  // Netherlands
+  'netherlands':'NLD','pays-bas':'NLD','hollande':'NLD',
+  // Switzerland
+  'switzerland':'CHE','suisse':'CHE',
+  // Sweden
+  'sweden':'SWE','suede':'SWE','suède':'SWE',
+  // Additional common variants
+  'china':'CHN','chine':'CHN',
+  'russia':'RUS','russie':'RUS',
+  'brazil':'BRA','bresil':'BRA','brésil':'BRA',
+  'south korea':'KOR','corée du sud':'KOR',
+  'turkey':'TUR','turquie':'TUR',
+  'saudi arabia':'SAU','arabie saoudite':'SAU',
+  'south africa':'ZAF','afrique du sud':'ZAF',
+  'united arab emirates':'ARE','emirats arabes unis':'ARE','émirats arabes unis':'ARE'
+};
+
+/**
+ * Resolve a company record to an ISO-3 country code.
+ * Priority: country_code field → country_id/REF lookup → normalized country string
+ * Returns ISO-3 string (e.g. "DZA") or null if unresolvable.
+ */
+function resolveCountryIso(company) {
+  // A) Direct ISO code field (2 or 3 chars)
+  if (company.country_code) {
+    const cc = (company.country_code + '').trim().toUpperCase();
+    if (cc.length === 3) return cc;
+    if (cc.length === 2) {
+      // Best-effort ISO-2 → ISO-3 (match first 2 chars of ISO-3 codes)
+      for (const v of Object.values(COUNTRY_ISO)) { if (v.slice(0,2) === cc) return v; }
+    }
+  }
+  // B) country_id → REF_DATA.countries → name → ISO-3
+  if (company.country_id && REF_DATA.countries && REF_DATA.countries.length) {
+    const ref = REF_DATA.countries.find(r => r.id === company.country_id);
+    if (ref && ref.name) {
+      const lc = ref.name.toLowerCase().trim();
+      const iso = _COUNTRY_ISO_LC[lc] || _COUNTRY_SYNONYMS[lc];
+      if (iso) return iso;
+    }
+  }
+  // C) Normalize c.country free-text string (case-insensitive)
+  const raw = (company.country || '').trim();
+  if (!raw) return null;
+  const lc = raw.toLowerCase();
+  return _COUNTRY_ISO_LC[lc] || _COUNTRY_SYNONYMS[lc] || null;
+}
+
 
 const PL_LABEL  = {new:'Nouveau',contacted:'Contacté',qualified:'Qualifié',meeting:'Meeting',quoted:'Offre envoyée',negotiating:'Négociation',won:'Gagné',lost:'Perdu',inactive:'Inactif'};
 const PIPELINE_STAGES = ['new','contacted','qualified','meeting','quoted','negotiating','won','lost','inactive'];
@@ -2669,10 +2744,14 @@ let MAP={loaded:false,svg:null,proj:null,path:null,zoom:null,world:null,sel:null
 function countryIdx(mode){
   const idx={};
   CRM_DATA.companies.forEach(c=>{
-    const cn=(c.country||'').trim();if(!cn)return;
     if(mode==='priority'&&!c.is_priority)return;
-    if(!idx[cn])idx[cn]=[];
-    idx[cn].push(c);
+    // Resolve to ISO-3 first, then to the canonical display name used as data-name on SVG paths
+    const iso=resolveCountryIso(c);
+    if(!iso)return;
+    const canonical=isoToName(iso);
+    if(!canonical)return;
+    if(!idx[canonical])idx[canonical]=[];
+    idx[canonical].push(c);
   });
   return idx;
 }
