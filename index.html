@@ -1042,7 +1042,15 @@ const ISO_NUM = {
   "192":"CUB","214":"DOM","630":"PRI","470":"MLT","352":"ISL","492":"MCO","674":"SMR",
   "826":"GBR","578":"NOR","208":"DNK","246":"FIN","752":"SWE"
 };
-function n2a3(id){ return ISO_NUM[String(id)] || null; }
+function n2a3(id){
+  if(id==null)return null;
+  const raw=String(id).trim();
+  if(!raw)return null;
+  if(ISO_NUM[raw])return ISO_NUM[raw];
+  const parsed=parseInt(raw,10);
+  if(!Number.isNaN(parsed)){const normalized=String(parsed);if(ISO_NUM[normalized])return ISO_NUM[normalized];}
+  return null;
+}
 function nameToISO(n){ return COUNTRY_ISO[n] || null; }
 function isoToName(iso){ for(const[k,v] of Object.entries(COUNTRY_ISO)) if(v===iso) return k; return null; }
 
@@ -2897,39 +2905,50 @@ let MAP={loaded:false,svg:null,proj:null,path:null,zoom:null,world:null,sel:null
 
 function countryIdx(mode){
   const idx={};
-  let withCountry=0, mapped=0;
   const unresolved=[];
+  let withCountry=0;
+  let mapped=0;
 
   CRM_DATA.companies.forEach(c=>{
-    if(mode==='priority'&&!c.is_priority)return;
     const raw=(c.country||'').trim();
     if(!raw)return;
     withCountry++;
-    const iso=resolveCountryIso(c);
-    if(!iso){unresolved.push(raw);return;}
-    const canonical=isoToName(iso);
-    if(!canonical)return;
-    mapped++;
+    if(mode==='priority'&&!c.is_priority)return;
+    const iso3=resolveCountryIso(c);
+    if(!iso3){unresolved.push(raw);return;}
+    const canonical=isoToName(iso3);
+    if(!canonical){unresolved.push(raw);return;}
     if(!idx[canonical])idx[canonical]=[];
     idx[canonical].push(c);
+    mapped++;
   });
 
-  // ── Debug snapshot (mode=all only, overwrites each map open) ──────────────
-  if(mode==='all'){
-    const algKey=isoToName('DZA');
-    window.__mapDebug={
-      totalCompanies:CRM_DATA.companies.length,
-      withCountry,
-      mappedCompanies:mapped,
-      unresolvedNonEmpty:unresolved.length,
-      unresolvedSamples:[...new Set(unresolved)].slice(0,30),
-      sampleKeys:Object.keys(idx).slice(0,15),
-      algeriaKey:algKey,
-      algeriaCount:algKey&&idx[algKey]?idx[algKey].length:0,
-      targetMapped:7236
-    };
-    console.log('[MAP] countryIdx debug →',window.__mapDebug);
-  }
+  // ── unresolved frequency ──────────────────────────────────────────────────
+  const unresolvedCounts={};
+  unresolved.forEach(r=>{unresolvedCounts[r]=(unresolvedCounts[r]||0)+1;});
+
+  // ── canonical frequency ───────────────────────────────────────────────────
+  const canonicalCounts={};
+  Object.entries(idx).forEach(([k,v])=>{canonicalCounts[k]=v.length;});
+
+  // ── Algeria diagnostics ───────────────────────────────────────────────────
+  const algeriaCanonicalKey=isoToName('DZA');
+  const algeriaResolvedCount=canonicalCounts[algeriaCanonicalKey]||0;
+  const algeriaPresentInIndex=!!idx[algeriaCanonicalKey];
+
+  window.__mapDebug={
+    totalCompanies:CRM_DATA.companies.length,
+    withCountry:withCountry,
+    mappedCompanies:mapped,
+    unresolvedNonEmpty:unresolved.length,
+    unresolvedSamples:[...new Set(unresolved)].slice(0,30),
+    unresolvedCounts:unresolvedCounts,
+    canonicalCounts:canonicalCounts,
+    algeriaCanonicalKey:algeriaCanonicalKey,
+    algeriaResolvedCount:algeriaResolvedCount,
+    algeriaPresentInIndex:algeriaPresentInIndex
+  };
+  console.log('[MAP] countryIdx →',window.__mapDebug);
   return idx;
 }
 
