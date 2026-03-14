@@ -1047,78 +1047,232 @@ function nameToISO(n){ return COUNTRY_ISO[n] || null; }
 function isoToName(iso){ for(const[k,v] of Object.entries(COUNTRY_ISO)) if(v===iso) return k; return null; }
 
 // ── COUNTRY ISO-3 RESOLUTION ──────────────────────────────────────────────────
-// Case-insensitive cache built from COUNTRY_ISO (runs once at startup)
-const _COUNTRY_ISO_LC = Object.fromEntries(
-  Object.entries(COUNTRY_ISO).map(([k,v])=>[k.toLowerCase().trim(),v])
+
+/**
+ * normalizeCountryText — trim + lowercase + strip all diacritics + collapse spaces.
+ * "Algérie" → "algerie", "ÉTATS-UNIS" → "etats-unis", "Pays‑Bas" → "pays-bas"
+ */
+function normalizeCountryText(s) {
+  if (!s) return '';
+  return s.trim().toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/\s+/g, ' ');
+}
+
+// Lookup built from COUNTRY_ISO using normalized keys (accent-free, lowercase)
+const _COUNTRY_ISO_NORM = Object.fromEntries(
+  Object.entries(COUNTRY_ISO).map(([k, v]) => [normalizeCountryText(k), v])
 );
-// Extra synonyms: uppercase/abbreviated/accent-stripped variants not in COUNTRY_ISO
-const _COUNTRY_SYNONYMS = {
+
+// Also keep an LC-only (no accent strip) cache for fast exact matches
+const _COUNTRY_ISO_LC = Object.fromEntries(
+  Object.entries(COUNTRY_ISO).map(([k, v]) => [k.toLowerCase().trim(), v])
+);
+
+/**
+ * _COUNTRY_ALIASES — normalized (accent-free, lowercase) keys → ISO-3.
+ * Covers French/English variants, abbreviations, Salesforce-style labels.
+ * All keys are already in normalizeCountryText() form (no accents, lowercase).
+ */
+const _COUNTRY_ALIASES = {
   // Algeria
-  'algerie':'DZA','algeria':'DZA','algérie':'DZA',
+  'algerie':'DZA','algeria':'DZA',
   // France
   'france':'FRA',
   // Germany
-  'germany':'DEU','allemagne':'DEU',
+  'allemagne':'DEU','germany':'DEU',
   // Spain
-  'spain':'ESP','espagne':'ESP',
+  'espagne':'ESP','spain':'ESP',
   // United Kingdom
-  'uk':'GBR','united kingdom':'GBR','grande-bretagne':'GBR','royaume-uni':'GBR','great britain':'GBR',
+  'uk':'GBR','grande-bretagne':'GBR','grande-bretagne / uk':'GBR',
+  'royaume-uni':'GBR','united kingdom':'GBR','great britain':'GBR','angleterre':'GBR',
   // United States
-  'usa':'USA','us':'USA','etats-unis':'USA','états-unis':'USA','united states':'USA','etats-unis / usa':'USA',
+  'usa':'USA','us':'USA','etats-unis':'USA','etats-unis / usa':'USA',
+  'united states':'USA','united states of america':'USA','amerique du nord':'USA',
   // Morocco
-  'morocco':'MAR','maroc':'MAR',
+  'maroc':'MAR','morocco':'MAR',
   // Tunisia
-  'tunisia':'TUN','tunisie':'TUN',
+  'tunisie':'TUN','tunisia':'TUN',
   // Italy
-  'italy':'ITA','italie':'ITA',
+  'italie':'ITA','italy':'ITA',
   // Belgium
-  'belgium':'BEL','belgique':'BEL',
+  'belgique':'BEL','belgium':'BEL',
   // Netherlands
-  'netherlands':'NLD','pays-bas':'NLD','hollande':'NLD',
+  'pays-bas':'NLD','netherlands':'NLD','hollande':'NLD','nederland':'NLD',
   // Switzerland
-  'switzerland':'CHE','suisse':'CHE',
+  'suisse':'CHE','switzerland':'CHE',
+  // Turkey
+  'turquie':'TUR','turkey':'TUR',
   // Sweden
-  'sweden':'SWE','suede':'SWE','suède':'SWE',
-  // Additional common variants
-  'china':'CHN','chine':'CHN',
-  'russia':'RUS','russie':'RUS',
-  'brazil':'BRA','bresil':'BRA','brésil':'BRA',
-  'south korea':'KOR','corée du sud':'KOR',
-  'turkey':'TUR','turquie':'TUR',
-  'saudi arabia':'SAU','arabie saoudite':'SAU',
-  'south africa':'ZAF','afrique du sud':'ZAF',
-  'united arab emirates':'ARE','emirats arabes unis':'ARE','émirats arabes unis':'ARE'
+  'suede':'SWE','sweden':'SWE',
+  // China
+  'chine':'CHN','china':'CHN',
+  // Russia
+  'russie':'RUS','russia':'RUS','federation de russie':'RUS',
+  // Brazil
+  'bresil':'BRA','brazil':'BRA',
+  // South Korea
+  'coree du sud':'KOR','south korea':'KOR','coree':'KOR','korea':'KOR',
+  // Saudi Arabia
+  'arabie saoudite':'SAU','saudi arabia':'SAU','arabie':'SAU',
+  // South Africa
+  'afrique du sud':'ZAF','south africa':'ZAF',
+  // UAE
+  'emirats arabes unis':'ARE','united arab emirates':'ARE','uae':'ARE',
+  // Ivory Coast
+  'cote d\'ivoire':'CIV','cote divoire':'CIV','ivory coast':'CIV',
+  // Dominican Republic
+  'republique dominicaine':'DOM','dominican republic':'DOM','republica dominicana':'DOM',
+  // Taiwan
+  'taiwan':'TWN','taiwan, province of china':'TWN',
+  // Palestine
+  'palestine':'PSE','territoires palestiniens':'PSE',
+  // Hong Kong
+  'hong kong':'HKG','hong-kong':'HKG',
+  // Belarus
+  'bielorussie':'BLR','belarus':'BLR',
+  // North Macedonia
+  'macedoine':'MKD','north macedonia':'MKD','macedoine du nord':'MKD',
+  // Serbia
+  'serbie':'SRB','serbia':'SRB',
+  // Congo DRC
+  'republique democratique du congo':'COD',
+  'congo, the democratic republic of the':'COD',
+  'rd congo':'COD','rdc':'COD',
+  // Iran
+  'iran, islamic republic of':'IRN','iran':'IRN',
+  // Venezuela
+  'venezuela, bolivarian republic of':'VEN','venezuela':'VEN',
+  // Mauritius
+  'ile maurice':'MUS','mauritius':'MUS','maurice (ile)':'MUS',
+  // Senegal
+  'senegal':'SEN',
+  // Ivory Coast alt
+  'cote-d\'ivoire':'CIV',
+  // Poland
+  'pologne':'POL','poland':'POL',
+  // Portugal
+  'portugal':'PRT',
+  // Romania
+  'roumanie':'ROU','romania':'ROU',
+  // Ukraine
+  'ukraine':'UKR',
+  // Greece
+  'grece':'GRC','greece':'GRC',
+  // Denmark
+  'danemark':'DNK','denmark':'DNK',
+  // Finland
+  'finlande':'FIN','finland':'FIN',
+  // Norway
+  'norvege':'NOR','norway':'NOR',
+  // Austria
+  'autriche':'AUT','austria':'AUT',
+  // Czech Republic
+  'republique tcheque':'CZE','czech republic':'CZE','tchequie':'CZE','czechia':'CZE',
+  // Hungary
+  'hongrie':'HUN','hungary':'HUN',
+  // Egypt
+  'egypte':'EGY','egypt':'EGY',
+  // Nigeria
+  'nigeria':'NGA',
+  // Kenya
+  'kenya':'KEN',
+  // Cameroon
+  'cameroun':'CMR','cameroon':'CMR',
+  // Pakistan
+  'pakistan':'PAK',
+  // Indonesia
+  'indonesie':'IDN','indonesia':'IDN',
+  // Malaysia
+  'malaisie':'MYS','malaysia':'MYS',
+  // Colombia
+  'colombie':'COL','colombia':'COL',
+  // Argentina
+  'argentine':'ARG','argentina':'ARG',
+  // Mexico
+  'mexique':'MEX','mexico':'MEX',
+  // Japan
+  'japon':'JPN','japan':'JPN',
+  // India
+  'inde':'IND','india':'IND',
+  // Australia
+  'australie':'AUS','australia':'AUS',
+  // Canada
+  'canada':'CAN',
+  // Luxembourg
+  'luxembourg':'LUX',
+  // Israel
+  'israel':'ISR',
+  // Jordan
+  'jordanie':'JOR','jordan':'JOR',
+  // Lebanon
+  'liban':'LBN','lebanon':'LBN',
+  // Gabon
+  'gabon':'GAB',
+  // Ghana
+  'ghana':'GHA',
+  // New Zealand
+  'nouvelle-zelande':'NZL','new zealand':'NZL',
+  // Singapore
+  'singapour':'SGP','singapore':'SGP',
+  // Oman
+  'oman':'OMN',
+  // Kuwait
+  'koweit':'KWT','kuwait':'KWT',
+  // Qatar
+  'qatar':'QAT',
+  // Iraq
+  'iraq':'IRQ','irak':'IRQ',
+  // Latvia
+  'lettonie':'LVA','latvia':'LVA',
+  // Lithuania
+  'lituanie':'LTU','lithuania':'LTU',
+  // Estonia
+  'estonie':'EST','estonia':'EST',
+  // Slovakia
+  'slovaquie':'SVK','slovakia':'SVK',
+  // Slovenia
+  'slovenie':'SVN','slovenia':'SVN',
+  // Croatia
+  'croatie':'HRV','croatia':'HRV',
+  // Bulgaria
+  'bulgarie':'BGR','bulgaria':'BGR',
 };
 
 /**
- * Resolve a company record to an ISO-3 country code.
- * Priority: country_code field → country_id/REF lookup → normalized country string
- * Returns ISO-3 string (e.g. "DZA") or null if unresolvable.
+ * resolveCountryIso — resolve a company to an ISO-3 code.
+ * Priority: country_code → country_id/REF → free-text (4-pass normalization)
+ * Returns "DZA", "FRA", etc., or null if truly unresolvable.
  */
 function resolveCountryIso(company) {
-  // A) Direct ISO code field (2 or 3 chars)
+  // A) Direct ISO-3 or ISO-2 code field
   if (company.country_code) {
     const cc = (company.country_code + '').trim().toUpperCase();
     if (cc.length === 3) return cc;
     if (cc.length === 2) {
-      // Best-effort ISO-2 → ISO-3 (match first 2 chars of ISO-3 codes)
-      for (const v of Object.values(COUNTRY_ISO)) { if (v.slice(0,2) === cc) return v; }
+      for (const v of Object.values(COUNTRY_ISO)) { if (v.slice(0, 2) === cc) return v; }
     }
   }
-  // B) country_id → REF_DATA.countries → name → ISO-3
+  // B) country_id → REF_DATA.countries name → normalized lookup
   if (company.country_id && REF_DATA.countries && REF_DATA.countries.length) {
     const ref = REF_DATA.countries.find(r => r.id === company.country_id);
     if (ref && ref.name) {
-      const lc = ref.name.toLowerCase().trim();
-      const iso = _COUNTRY_ISO_LC[lc] || _COUNTRY_SYNONYMS[lc];
+      const norm = normalizeCountryText(ref.name);
+      const iso = _COUNTRY_ISO_NORM[norm] || _COUNTRY_ALIASES[norm]
+               || _COUNTRY_ISO_LC[ref.name.toLowerCase().trim()];
       if (iso) return iso;
     }
   }
-  // C) Normalize c.country free-text string (case-insensitive)
+  // C) Free-text c.country — four progressively looser passes
   const raw = (company.country || '').trim();
   if (!raw) return null;
-  const lc = raw.toLowerCase();
-  return _COUNTRY_ISO_LC[lc] || _COUNTRY_SYNONYMS[lc] || null;
+  const lc   = raw.toLowerCase();                   // pass 1: lowercase only
+  const norm = normalizeCountryText(raw);            // pass 2: lowercase + accent-strip
+  return _COUNTRY_ISO_LC[lc]     // exact LC in COUNTRY_ISO keys
+      || _COUNTRY_ALIASES[lc]    // LC alias
+      || _COUNTRY_ISO_NORM[norm] // accent-normalized in COUNTRY_ISO keys
+      || _COUNTRY_ALIASES[norm]  // accent-normalized alias
+      || null;
 }
 
 
@@ -2743,16 +2897,39 @@ let MAP={loaded:false,svg:null,proj:null,path:null,zoom:null,world:null,sel:null
 
 function countryIdx(mode){
   const idx={};
+  let withCountry=0, mapped=0;
+  const unresolved=[];
+
   CRM_DATA.companies.forEach(c=>{
     if(mode==='priority'&&!c.is_priority)return;
-    // Resolve to ISO-3 first, then to the canonical display name used as data-name on SVG paths
+    const raw=(c.country||'').trim();
+    if(!raw)return;
+    withCountry++;
     const iso=resolveCountryIso(c);
-    if(!iso)return;
+    if(!iso){unresolved.push(raw);return;}
     const canonical=isoToName(iso);
     if(!canonical)return;
+    mapped++;
     if(!idx[canonical])idx[canonical]=[];
     idx[canonical].push(c);
   });
+
+  // ── Debug snapshot (mode=all only, overwrites each map open) ──────────────
+  if(mode==='all'){
+    const algKey=isoToName('DZA');
+    window.__mapDebug={
+      totalCompanies:CRM_DATA.companies.length,
+      withCountry,
+      mappedCompanies:mapped,
+      unresolvedNonEmpty:unresolved.length,
+      unresolvedSamples:[...new Set(unresolved)].slice(0,30),
+      sampleKeys:Object.keys(idx).slice(0,15),
+      algeriaKey:algKey,
+      algeriaCount:algKey&&idx[algKey]?idx[algKey].length:0,
+      targetMapped:7236
+    };
+    console.log('[MAP] countryIdx debug →',window.__mapDebug);
+  }
   return idx;
 }
 
