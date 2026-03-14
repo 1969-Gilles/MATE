@@ -713,6 +713,7 @@ input.date-input:focus{border-color:#3b82f6}
   <div id="topbar">
     <h2 id="page-title">Dashboard</h2>
     <input type="search" id="search-box" placeholder="🔍  Rechercher entreprise, pays, technologie…" oninput="globalSearch(this.value)">
+    <span id="global-search-badge" style="display:none;align-items:center;gap:4px;font-size:10px;font-weight:600;color:#38bdf8;background:rgba(56,189,248,.12);border:1px solid rgba(56,189,248,.3);border-radius:5px;padding:2px 8px;white-space:nowrap;letter-spacing:.02em">🌐 Recherche globale active</span>
     <button id="btn-export-companies" class="btn btn-ghost" onclick="exportCSV()">⬇ Entreprises</button>
     <button id="btn-export-contacts" class="btn btn-ghost" onclick="exportContactsCSV()">⬇ Contacts</button>
     <button id="btn-add-company" class="btn btn-primary" onclick="openNewCompanyModal()">+ Ajouter</button>
@@ -1180,15 +1181,32 @@ function renderDashboard(){
 
 // ─── COMPANIES ───────────────────────────────────────────────────────────────
 function filtered(){
-  let d=CRM_DATA.companies;
-  if(STATE.showPriorityOnly)d=d.filter(c=>c.is_priority);
   const q=STATE.search.toLowerCase().trim();
-  if(q)d=d.filter(c=>(c.name||'').toLowerCase().includes(q)||(c.country||'').toLowerCase().includes(q)||(c.city||'').toLowerCase().includes(q)||(c.technology||'').toLowerCase().includes(q));
-  if(STATE.filterCountry)d=d.filter(c=>c.country===STATE.filterCountry);
-  if(STATE.filterStatus)d=d.filter(c=>(c.pipeline||'new')===STATE.filterStatus);
-  if(STATE.filterPriority)d=d.filter(c=>(c.priority||'medium')===STATE.filterPriority);
-  if(STATE.filterConfidence)d=d.filter(c=>c.confidence===STATE.filterConfidence);
-  if(STATE.filterTech){d=d.filter(c=>{const cl=techClass(c.technology);if(STATE.filterTech==='Flexo')return cl==='flexo';if(STATE.filterTech==='Helio')return cl==='roto';if(STATE.filterTech==='Both')return cl==='both';if(STATE.filterTech==='Pkg')return cl==='pkg';return true;});}
+  let d;
+  if(q){
+    // ── GLOBAL SEARCH MODE: bypass priority tab + all dropdown filters ──────
+    d=CRM_DATA.companies.filter(c=>
+      (c.name||'').toLowerCase().includes(q)||
+      (c.country||'').toLowerCase().includes(q)||
+      (c.city||'').toLowerCase().includes(q)||
+      (c.website||'').toLowerCase().includes(q)||
+      (c.notes||'').toLowerCase().includes(q)||
+      (c.status||'').toLowerCase().includes(q)||
+      (c.pipeline||'').toLowerCase().includes(q)||
+      (c.priority||'').toLowerCase().includes(q)||
+      (c.confidence||'').toLowerCase().includes(q)||
+      (c.technology||'').toLowerCase().includes(q)
+    );
+  } else {
+    // ── NORMAL FILTER MODE: apply all existing filters as before ─────────────
+    d=CRM_DATA.companies;
+    if(STATE.showPriorityOnly)d=d.filter(c=>c.is_priority);
+    if(STATE.filterCountry)d=d.filter(c=>c.country===STATE.filterCountry);
+    if(STATE.filterStatus)d=d.filter(c=>(c.pipeline||'new')===STATE.filterStatus);
+    if(STATE.filterPriority)d=d.filter(c=>(c.priority||'medium')===STATE.filterPriority);
+    if(STATE.filterConfidence)d=d.filter(c=>c.confidence===STATE.filterConfidence);
+    if(STATE.filterTech){d=d.filter(c=>{const cl=techClass(c.technology);if(STATE.filterTech==='Flexo')return cl==='flexo';if(STATE.filterTech==='Helio')return cl==='roto';if(STATE.filterTech==='Both')return cl==='both';if(STATE.filterTech==='Pkg')return cl==='pkg';return true;});}
+  }
   const col=STATE.sortCol,dir=STATE.sortDir;
   d.sort((a,b)=>{
     if(col==='is_priority'){if(a.is_priority&&!b.is_priority)return -dir;if(!a.is_priority&&b.is_priority)return dir;}
@@ -1225,7 +1243,12 @@ function renderPagination(total){
 function goPage(n){STATE.page=n;renderCompanies();window.scrollTo(0,0);}
 function sortBy(col){STATE.sortDir=STATE.sortCol===col?-STATE.sortDir:1;STATE.sortCol=col;STATE.page=1;document.querySelectorAll('.data-table th').forEach(th=>th.className='');const th=document.querySelector(`.data-table th[data-col="${col}"]`);if(th)th.className=STATE.sortDir===1?'sorted-asc':'sorted-desc';renderCompanies();}
 function applyFilters(){STATE.filterCountry=document.getElementById('f-country').value;STATE.filterTech=document.getElementById('f-tech').value;STATE.filterStatus=document.getElementById('f-status').value;STATE.filterPriority=document.getElementById('f-priority').value;STATE.filterConfidence=document.getElementById('f-confidence').value;STATE.page=1;renderCompanies();}
-function globalSearch(q){STATE.search=q;STATE.page=1;if(q.length>1)showView('companies');else if(STATE.view==='companies')renderCompanies();}
+function globalSearch(q){
+  STATE.search=q;STATE.page=1;
+  const badge=document.getElementById('global-search-badge');
+  if(badge)badge.style.display=q.trim()?'inline-flex':'none';
+  if(q.length>1)showView('companies');else if(STATE.view==='companies')renderCompanies();
+}
 
 // ─── REF LABEL RESOLVER (async, code or id → name) ───────────────────────────
 // Fetches a single label from a ref_* table.
