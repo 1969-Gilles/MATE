@@ -717,6 +717,7 @@ input.date-input:focus{border-color:#3b82f6}
     <button id="btn-export-contacts" class="btn btn-ghost" onclick="exportContactsCSV()">⬇ Contacts</button>
     <button id="btn-add-company" class="btn btn-primary" onclick="openNewCompanyModal()">+ Ajouter</button>
     <span class="user-label" style="font-size:11px;color:#64748b;white-space:nowrap">👤 <span id="current-user"></span> <span id="current-role" style="font-size:9px;font-weight:700;color:#475569;background:#1e293b;border:1px solid #334155;border-radius:4px;padding:1px 6px;vertical-align:middle"></span></span>
+    <button type="button" class="btn btn-ghost" onclick="resetLocalState()" title="Vide les filtres, le cache local et recharge la page" style="opacity:.75;font-size:11px;">↺ Reset filtres / cache</button>
     <button class="btn btn-ghost" onclick="authLogout()">⏻ Déconnexion</button>
   </div>
 
@@ -1128,7 +1129,11 @@ function showView(v){
   else if(v==='pipeline') renderPipeline();
   else if(v==='contacts'){STATE.cPage=1;renderContacts();}
   else if(v==='technologies') renderTechnologies();
-  else if(v==='supabase') renderSbDashboard();
+  else if(v==='supabase'){
+    // During boot (no session) silently fall back to dashboard instead of alerting
+    if(!sessionStorage.getItem('user_email')){ showView('dashboard'); return; }
+    renderSbDashboard();
+  }
 }
 
 // ─── DASHBOARD ───────────────────────────────────────────────────────────────
@@ -2836,6 +2841,8 @@ function setSbInitState(state, detail){
 // ─── INITIALISATION UI (après chargement données) ────────────────────────────
 function initUI(){
   loadLS();
+  // Safety: never open supabase view on startup regardless of any persisted state
+  if(!STATE.view || STATE.view === 'supabase') STATE.view = 'dashboard';
   const countries = [...new Set(CRM_DATA.companies.map(c=>c.country).filter(Boolean))].sort();
   const sel = document.getElementById('f-country');
   // Vider puis repeupler la liste pays (évite les doublons si rechargement)
@@ -2858,13 +2865,16 @@ function initUI(){
 
 // ─── INIT PRINCIPAL — SOURCE UNIQUE : SUPABASE ───────────────────────────────
 async function init(){
+  // ── Auth guard: never run before the user is authenticated
+  if(!sessionStorage.getItem('user_email')) return;
+
   const overlay = document.getElementById('sb-init-overlay');
   if(overlay) overlay.style.display = 'flex';
 
   const cfg = getSupabaseCfg();
 
-  // Supabase non configuré — bloquer le chargement et demander la config
-  if(!cfg.url || !cfg.key){
+  // Show config screen only if truly not configured (no constants AND no _sbClient)
+  if(!window._sbClient && (!cfg.url || !cfg.key)){
     setSbInitState('config');
     return;
   }
@@ -3676,8 +3686,15 @@ const SB_CFG_KEY = 'dcm_supabase_cfg';
 var _sbAllContacts = [];
 
 function getSupabaseCfg(){
-  try{ return JSON.parse(localStorage.getItem(SB_CFG_KEY)) || {}; }
-  catch{ return {}; }
+  try{
+    const stored = JSON.parse(localStorage.getItem(SB_CFG_KEY)) || {};
+    if(stored.url && stored.key) return stored;
+  } catch(e){}
+  // Fall back to compiled constants (set at build time)
+  const url = (typeof SUPABASE_URL      !== 'undefined' && SUPABASE_URL)      || '';
+  const key = (typeof SUPABASE_ANON_KEY !== 'undefined' && SUPABASE_ANON_KEY) || '';
+  if(url && key) return { url, key };
+  return {};
 }
 
 function openSupabaseConfig(){
@@ -3856,7 +3873,14 @@ function renderSupabaseContacts(data){
 
 
 async function authLogout() {
-  try { await window._sbClient.auth.signOut(); } catch(e) {}
+  try { window._sbClient.auth.signOut(); } catch(e) {}
+  sessionStorage.clear();
+  location.reload();
+}
+
+function resetLocalState() {
+  if (!confirm("Réinitialiser les filtres et le cache local du navigateur ?")) return;
+  localStorage.clear();
   sessionStorage.clear();
   location.reload();
 }
@@ -4453,6 +4477,9 @@ document.getElementById("current-user").textContent =
     if (_rb2) _rb2.textContent = '[' + resolveUserRole(email) + ']';
     err.style.display = 'none';
     showDashboard();
+    // Load CRM data now that user is authenticated; always land on Dashboard
+    if(typeof STATE !== 'undefined') STATE.view = 'dashboard';
+    if(typeof init === 'function') init();
     // Apply role-based UI restrictions after login
     var _btnAddL = document.getElementById('btn-add-company');
     if (_btnAddL && !canCreate()) {
