@@ -1655,7 +1655,7 @@ async function _renderModalContent(c, cContacts){
   const activePriority = c.priority_code || c.priority || 'medium';
 
   document.getElementById('modal-content').innerHTML=`
-    <div class="modal-hdr"><div class="modal-icon">${c.is_priority?'⭐':'🏭'}</div><div class="modal-title"><h2>${esc(c.name)}</h2><p>${esc(c.country||'')}${c.city?' · '+esc(c.city):''}${c.website?' · <a href="'+esc(c.website)+'" target="_blank">'+esc(c.website.replace('https://','').replace('http://',''))+'</a>':''}</p></div><button id="btn-edit-company" class="btn btn-ghost btn-sm" onclick="openEditCompanyModal(${id})" style="margin-right:6px" title="Modifier les informations de cette entreprise">✏ Modifier</button><button class="btn btn-refresh" onclick="scrapeCompany(${id})" id="btn-refresh-${id}" title="Recherche web automatique pour mettre à jour la fiche">🔍 Rafraîchir</button></div>
+    <div class="modal-hdr"><div class="modal-icon">${c.is_priority?'⭐':'🏭'}</div><div class="modal-title"><h2>${esc(c.name)}</h2><p>${esc(c.country||'')}${c.city?' · '+esc(c.city):''}${c.website?' · <a href="'+esc(c.website)+'" target="_blank">'+esc(c.website.replace('https://','').replace('http://',''))+'</a>':''}</p></div><button id="btn-edit-company" class="btn btn-ghost btn-sm" onclick="openEditCompanyModal(${id})" style="margin-right:6px" title="Modifier les informations de cette entreprise">✏ Modifier</button><button class="btn btn-refresh" onclick="scrapeCompany(${id})" id="btn-refresh-${id}" title="Recherche web automatique pour mettre à jour la fiche">🔍 Rafraîchir</button><button class="btn btn-ghost btn-sm" onclick="closeModal()" style="margin-left:6px" title="Fermer">✕ Fermer</button></div>
     <div class="detail-sec"><h3>📊 Pipeline</h3><div class="status-row" id="sr-${id}">${stages.map(s=>`<button class="status-btn${activePipeline===s?' sel':''}" onclick="setPipeline(${id},'${s}')">${PL_LABEL[s]}</button>`).join('')}</div><h3>⭐ Priorité</h3><div class="priority-row" id="pr-${id}">${prios.map(p=>`<button class="prio-btn${activePriority===p?' sel-'+p:''}" onclick="setPriority(${id},'${p}')">${pl[p]}</button>`).join('')}</div></div>
     <div class="detail-grid">
       <div class="df"><label>Pays</label><span>${esc(c.country||'—')}</span></div>
@@ -1683,9 +1683,12 @@ async function _renderModalContent(c, cContacts){
     <div class="confirm-bar" id="del-confirm-${id}" style="display:none">
       <p>⚠️ Supprimer définitivement <strong>${esc(c.name)}</strong> et tous ses liens ?</p>
       <button class="btn btn-ghost btn-sm" onclick="document.getElementById('del-confirm-${id}').style.display='none'">Annuler</button>
-      <button class="btn btn-danger btn-sm" onclick="deleteCompany(${id})">✗ Confirmer</button>
+      <button class="btn btn-danger btn-sm" onclick="deleteCompany(${id})">✗ Confirmer la suppression</button>
     </div>
-    <div style="text-align:right;margin-top:6px"><button class="btn btn-danger btn-sm" onclick="document.getElementById('del-confirm-${id}').style.display='flex'">🗑 Supprimer l'entreprise</button></div>`;
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-top:18px;padding-top:14px;border-top:1px solid #1e293b">
+      <button class="btn btn-ghost" onclick="closeModal()" style="font-size:12px">✕ Fermer</button>
+      <button class="btn btn-danger btn-sm" onclick="document.getElementById('del-confirm-${id}').style.display='flex'" style="font-size:11px;padding:6px 14px">🗑 Supprimer l'entreprise</button>
+    </div>`;
   document.getElementById('modal-overlay').classList.add('open');
   // Visually disable Add Contact button for non-creators (editor/viewer)
   if (!canCreate()) {
@@ -1866,6 +1869,8 @@ async function saveNoteBtn(id){
     console.log('[data] company reloaded after save', c);
     const idx = CRM_DATA.companies.findIndex(x => x.id === id);
     if(idx >= 0) Object.assign(CRM_DATA.companies[idx], c);
+    // Keep textarea in sync with the canonical DB value
+    ta.value = c.user_notes || '';
     if(ind){ ind.classList.add('show'); setTimeout(()=>ind.classList.remove('show'), 2500); }
     toast('💾 Notes sauvegardées');
   } catch(err) {
