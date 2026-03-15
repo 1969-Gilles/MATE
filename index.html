@@ -693,7 +693,7 @@ input.date-input:focus{border-color:#3b82f6}
     <div class="nav-item" data-v="map" onclick="showView('map')"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>Carte Mondiale<span class="nav-badge" style="background:#064e3b;color:#6ee7b7" id="nb-countries">155</span></div>
     <div class="nav-item" data-v="pipeline" onclick="showView('pipeline')"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Pipeline<span class="nav-badge nb-orange" id="nb-prio">—</span></div>
     <div class="nav-item" data-v="contacts" onclick="showView('contacts')"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>Contacts<span class="nav-badge nb-green" id="nb-contacts">7 880</span></div>
-    <div class="nav-item" id="nav-scraping" data-v="scraping" onclick="showView('scraping')"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07M8.46 8.46a5 5 0 0 0 0 7.07"/></svg>Scraping</div>
+    <div class="nav-item" data-v="scraping" onclick="showView('scraping')"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07M8.46 8.46a5 5 0 0 0 0 7.07"/></svg>Scraping</div>
   </nav>
       <div class="nav-sec" style="margin-top:8px">Ressources</div>
     <div class="nav-item" data-v="technologies" onclick="showView('technologies')"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07M8.46 8.46a5 5 0 0 0 0 7.07"/></svg>Technologies</div>
@@ -1402,9 +1402,6 @@ function showView(v){
   else if(v==='pipeline') renderPipeline();
   else if(v==='contacts'){STATE.cPage=1;renderContacts();}
   else if(v==='technologies') renderTechnologies();
-  else if(v==='scraping'){
-    if(!canAccessScraping()){ showView('dashboard'); return; }
-  }
   else if(v==='supabase'){
     // During boot (no session) silently fall back to dashboard instead of alerting
     if(!sessionStorage.getItem('user_email')){ showView('dashboard'); return; }
@@ -1873,6 +1870,13 @@ Recherche et retourne UNIQUEMENT ce JSON:
 }`;
 
   const apiKey=getApiKey();
+  if(!apiKey){
+    panel.classList.add('open');
+    content.innerHTML=`<div class="apikey-banner"><div style="font-size:20px">🔑</div><div style="flex:1"><p><strong>Clé API Anthropic requise</strong> pour la recherche web.<br>Entrez votre clé <code style="background:#0f172a;padding:1px 5px;border-radius:3px">sk-ant-...</code> dans les paramètres (bas de la barre gauche) ou directement ci-dessous.</p><div class="apikey-input-wrap"><input class="apikey-input" id="apikey-input-field" placeholder="sk-ant-api03-..." type="password"><button class="btn btn-primary btn-sm apikey-set" onclick="setApiKey();scrapeCompany(${id})">Enregistrer & Lancer</button></div></div></div>`;
+    btn.classList.remove('loading');
+    btn.textContent='🔍 Rafraîchir';
+    return;
+  }
 
   try{
     const resp=await fetch('https://api.anthropic.com/v1/messages',{
@@ -4224,10 +4228,6 @@ function getCurrentRole() { return sessionStorage.getItem('user_role') || 'viewe
 function canCreate()      { return ['admin','editor'].includes(getCurrentRole()); }
 function canEdit()        { return ['admin','editor'].includes(getCurrentRole()); }
 function canDelete()      { return getCurrentRole() === 'admin'; }
-function canAccessScraping() {
-  var email = sessionStorage.getItem('user_email') || '';
-  return email === 'admin@mate-crm.fr';
-}
 
 document.getElementById("current-user").textContent =
   sessionStorage.getItem("user_email") || "Admin";
@@ -4761,8 +4761,6 @@ document.getElementById("current-user").textContent =
     document.getElementById('login-screen').style.display = 'none';
     document.getElementById('sidebar').style.display = '';
     document.getElementById('main').style.display = '';
-    var _ns = document.getElementById('nav-scraping');
-    if (_ns) _ns.style.display = canAccessScraping() ? '' : 'none';
   }
   // Init Supabase client — constants first, localStorage as fallback
   const sbUrl  = (typeof SUPABASE_URL      !== 'undefined' && SUPABASE_URL)      || localStorage.getItem('dcm_supabase_url')  || '';
