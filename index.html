@@ -1558,7 +1558,82 @@ async function sbFetchContacts(companyId){
   return Array.isArray(rows) ? rows : [];
 }
 
-// Rendu interne du modal à partir d'objets company + contacts déjà chargés
+// ── Address helpers ───────────────────────────────────────────────────────────
+function getMapsUrl(c) {
+  if (c.latitude != null && c.longitude != null) {
+    return `https://www.google.com/maps?q=${c.latitude},${c.longitude}`;
+  }
+  const parts = [c.address_line1, c.address_line2, c.postal_code, c.city, c.state_region, c.country].filter(Boolean);
+  if (!parts.length) return null;
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(parts.join(', '))}`;
+}
+function getNearbyMapsUrl(c, type) {
+  const labels = { hotels: 'hotels', restaurants: 'restaurants', activities: 'things to do' };
+  const q = labels[type] || type;
+  if (c.latitude != null && c.longitude != null) {
+    return `https://www.google.com/maps/search/${encodeURIComponent(q)}/@${c.latitude},${c.longitude},14z`;
+  }
+  const parts = [c.address_line1, c.postal_code, c.city, c.country].filter(Boolean);
+  if (!parts.length) return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}`;
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q + ' near ' + parts.join(', '))}`;
+}
+function renderAddressSection(c) {
+  const lines = [];
+  if (c.address_line1) lines.push(`<div>${esc(c.address_line1)}</div>`);
+  if (c.address_line2) lines.push(`<div>${esc(c.address_line2)}</div>`);
+  const pcCity = [c.postal_code, c.city].filter(Boolean).join(' ');
+  if (pcCity) lines.push(`<div>${esc(pcCity)}</div>`);
+  if (c.state_region) lines.push(`<div>${esc(c.state_region)}</div>`);
+  if (c.country) lines.push(`<div>${esc(c.country)}</div>`);
+  if (c.latitude != null && c.longitude != null) lines.push(`<div style="color:#64748b;font-size:10px;margin-top:2px">GPS : ${c.latitude}, ${c.longitude}</div>`);
+  const mapsUrl = getMapsUrl(c);
+  const hasData = lines.length > 0;
+  if (!hasData && !mapsUrl) {
+    return `<div class="df" style="grid-column:1/-1"><label>Adresse</label><span style="color:#475569">—</span></div>`;
+  }
+  const nearbyLinks = mapsUrl ? `
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">
+      <a href="${esc(getNearbyMapsUrl(c,'hotels'))}" target="_blank" style="font-size:10px;color:#94a3b8;background:#0f172a;border:1px solid #334155;border-radius:5px;padding:3px 8px;text-decoration:none;white-space:nowrap">🏨 Hôtels</a>
+      <a href="${esc(getNearbyMapsUrl(c,'restaurants'))}" target="_blank" style="font-size:10px;color:#94a3b8;background:#0f172a;border:1px solid #334155;border-radius:5px;padding:3px 8px;text-decoration:none;white-space:nowrap">🍽 Restaurants</a>
+      <a href="${esc(getNearbyMapsUrl(c,'activities'))}" target="_blank" style="font-size:10px;color:#94a3b8;background:#0f172a;border:1px solid #334155;border-radius:5px;padding:3px 8px;text-decoration:none;white-space:nowrap">🎯 Activités</a>
+    </div>` : '';
+  const miniMap = mapsUrl ? `
+    <a href="${esc(mapsUrl)}" target="_blank" style="display:flex;flex-direction:column;align-items:center;justify-content:center;background:#0f172a;border:1px solid #334155;border-radius:9px;padding:16px 12px;min-height:90px;text-decoration:none;transition:border-color .2s;cursor:pointer;flex-shrink:0;width:110px" title="Ouvrir dans Google Maps" onmouseover="this.style.borderColor='#3b82f6'" onmouseout="this.style.borderColor='#334155'">
+      <div style="font-size:28px;margin-bottom:6px">🗺</div>
+      <div style="font-size:10px;color:#60a5fa;font-weight:600;text-align:center;line-height:1.3">Voir sur<br>la carte</div>
+      ${c.latitude != null ? `<div style="font-size:9px;color:#475569;margin-top:4px;text-align:center">${Number(c.latitude).toFixed(4)}, ${Number(c.longitude).toFixed(4)}</div>` : ''}
+    </a>` : '';
+  return `<div class="df" style="grid-column:1/-1"><label>Adresse</label><div style="display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap">
+    <div style="flex:1;min-width:140px;line-height:1.7">${hasData ? lines.join('') : '<span style="color:#475569">—</span>'}${nearbyLinks}</div>
+    ${miniMap}
+  </div></div>`;
+}
+function useCurrentPosition() {
+  if (!navigator.geolocation) { alert('Géolocalisation non disponible sur cet appareil.'); return; }
+  const btn = document.getElementById('btn-geolocate');
+  if (btn) { btn.disabled = true; btn.textContent = '⏳ Localisation…'; }
+  navigator.geolocation.getCurrentPosition(
+    function(pos) {
+      const lat = pos.coords.latitude.toFixed(6);
+      const lng = pos.coords.longitude.toFixed(6);
+      const latEl = document.getElementById('edit-latitude');
+      const lngEl = document.getElementById('edit-longitude');
+      if (latEl) latEl.value = lat;
+      if (lngEl) lngEl.value = lng;
+      // Flag for updateCompany to save geo_source
+      window._geoFromBrowser = true;
+      if (btn) { btn.disabled = false; btn.textContent = '✓ Position détectée'; }
+      console.log('[geolocate] lat:', lat, 'lng:', lng);
+    },
+    function(err) {
+      if (btn) { btn.disabled = false; btn.textContent = '📍 Utiliser ma position'; }
+      alert('Impossible de récupérer la position : ' + (err.message || err.code));
+    },
+    { enableHighAccuracy: true, timeout: 10000 }
+  );
+}
+
+// ── Rendu interne du modal à partir d'objets company + contacts déjà chargés
 async function _renderModalContent(c, cContacts){
   const id = c.id;
   const stages=PIPELINE_STAGES;
@@ -1596,6 +1671,7 @@ async function _renderModalContent(c, cContacts){
       ${c.tech_evidence?`<div class="df" style="grid-column:1/-1"><label>Évidence technique</label><span>${esc(c.tech_evidence)}</span></div>`:''}
       ${c.notes?`<div class="df" style="grid-column:1/-1"><label>Notes</label><span>${esc(c.notes)}</span></div>`:''}
       ${c.source_events?`<div class="df" style="grid-column:1/-1"><label>Salons</label><span>${esc(c.source_events)}</span></div>`:''}
+      ${renderAddressSection(c)}
     </div>
     <div class="detail-sec"><h3>👤 Contacts liés (${cContacts.length}) <button id="btn-add-contact" class="btn btn-primary btn-sm" style="margin-left:8px;font-size:10px;padding:3px 10px" onclick="openAddContactModal(${id})">+ Ajouter un contact</button></h3>${cContacts.length===0?`<div style="color:#475569;font-size:11px;padding:8px 0">Aucun contact lié — cliquez sur "+ Ajouter un contact" pour en créer un.</div>`:cContacts.slice(0,10).map((ct,i)=>`<div class="contact-card" style="position:relative"><div class="cc-avatar" style="background:${grad(i)}">${esc(initials(ct.first_name,ct.last_name,ct.company))}</div><div class="cc-info"><div class="cn">${ct.first_name||ct.last_name?esc(((ct.first_name||'')+' '+(ct.last_name||'')).trim()):'<em style="color:#475569">—</em>'}</div><div class="ct">${esc(ct.title||ct.notes||'')}</div><div class="cl">${ct.email?`<a href="mailto:${esc(ct.email)}">✉ ${esc(ct.email)}</a>`:''}${ct.phone?`<a href="tel:${esc(ct.phone)}">📞 ${esc(ct.phone)}</a>`:''}</div></div>${ct.id != null ? `<div style="position:absolute;top:6px;right:6px;display:flex;gap:4px"><button onclick="openEditContactFromView(${ct.id})" style="background:rgba(37,99,235,.1);border:1px solid rgba(37,99,235,.25);border-radius:5px;color:#60a5fa;font-size:10px;padding:3px 7px;cursor:pointer;line-height:1.4" title="Modifier ce contact">✏</button><button onclick="deleteContact(${ct.id})" style="background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);border-radius:5px;color:#ef4444;font-size:10px;padding:3px 7px;cursor:pointer;line-height:1.4" title="Supprimer ce contact">🗑</button></div>` : ''}</div>`).join('')}${cContacts.length>10?`<div style="text-align:center;color:#64748b;font-size:11px;padding:8px">… et ${cContacts.length-10} de plus</div>`:''}</div>
     <div class="detail-sec"><h3>📝 Mes notes</h3><textarea class="note-area" id="note-${id}" style="min-height:90px">${esc(c.user_notes||'')}</textarea><div class="note-save-row"><button class="btn btn-primary btn-sm" onclick="saveNoteBtn(${id})">💾 Sauvegarder les notes</button><span class="note-saved-indicator" id="note-saved-${id}">✓ Sauvegardé</span></div></div>
@@ -2540,6 +2616,35 @@ function openEditCompanyModal(id){
       </div>
     </div>
 
+    <label style="${lbl};margin-top:9px">Adresse ligne 1</label>
+    <input class="modal-input" id="edit-address-line1" value="${esc(c.address_line1||'')}" placeholder="12 rue de la Paix">
+
+    <label style="${lbl}">Adresse ligne 2</label>
+    <input class="modal-input" id="edit-address-line2" value="${esc(c.address_line2||'')}" placeholder="Bâtiment A, étage 3">
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:0">
+      <div>
+        <label style="${lbl}">Code postal</label>
+        <input class="modal-input" id="edit-postal-code" value="${esc(c.postal_code||'')}" placeholder="75001" style="margin-bottom:0">
+      </div>
+      <div>
+        <label style="${lbl}">Région / Province</label>
+        <input class="modal-input" id="edit-state-region" value="${esc(c.state_region||'')}" placeholder="Île-de-France" style="margin-bottom:0">
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:0;margin-top:9px">
+      <div>
+        <label style="${lbl}">Latitude</label>
+        <input class="modal-input" id="edit-latitude" type="number" step="0.000001" value="${c.latitude!=null?c.latitude:''}" placeholder="48.856614" style="margin-bottom:0">
+      </div>
+      <div>
+        <label style="${lbl}">Longitude</label>
+        <input class="modal-input" id="edit-longitude" type="number" step="0.000001" value="${c.longitude!=null?c.longitude:''}" placeholder="2.352221" style="margin-bottom:0">
+      </div>
+    </div>
+    <button type="button" id="btn-geolocate" class="btn btn-ghost btn-sm" onclick="useCurrentPosition()" style="margin-top:6px;width:100%;font-size:11px">📍 Utiliser ma position</button>
+
     <label style="${lbl};margin-top:9px">Site web</label>
     <input class="modal-input" id="edit-website" value="${esc(c.website||'')}" placeholder="https://…">
 
@@ -2630,8 +2735,16 @@ async function updateCompany(id){
     technology_id:   techId    ? parseInt(techId,    10) : null,
     manufacturer_id: mfrId     ? parseInt(mfrId,     10) : null,
     company_type_id: cTypeId   ? parseInt(cTypeId,   10) : null,
-    company_size_id: cSizeId   ? parseInt(cSizeId,   10) : null
+    company_size_id: cSizeId   ? parseInt(cSizeId,   10) : null,
+    address_line1:   (document.getElementById('edit-address-line1')?.value  || '').trim() || null,
+    address_line2:   (document.getElementById('edit-address-line2')?.value  || '').trim() || null,
+    postal_code:     (document.getElementById('edit-postal-code')?.value    || '').trim() || null,
+    state_region:    (document.getElementById('edit-state-region')?.value   || '').trim() || null,
+    latitude:        document.getElementById('edit-latitude')?.value  ? parseFloat(document.getElementById('edit-latitude').value)  : null,
+    longitude:       document.getElementById('edit-longitude')?.value ? parseFloat(document.getElementById('edit-longitude').value) : null,
+    ...(window._geoFromBrowser ? { geo_source: 'browser_geolocation', geo_updated_at: new Date().toISOString() } : {})
   };
+  window._geoFromBrowser = false;
 
   console.log('[updateCompany] payload:', payload);
 
