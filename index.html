@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-<title>MATE — CRM Global Flexo & Hélio v4</title>
+<title>MATE - CRM</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
@@ -693,7 +693,7 @@ input.date-input:focus{border-color:#3b82f6}
     <div class="nav-item" data-v="map" onclick="showView('map')"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>Carte Mondiale<span class="nav-badge" style="background:#064e3b;color:#6ee7b7" id="nb-countries">155</span></div>
     <div class="nav-item" data-v="pipeline" onclick="showView('pipeline')"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Pipeline<span class="nav-badge nb-orange" id="nb-prio">—</span></div>
     <div class="nav-item" data-v="contacts" onclick="showView('contacts')"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>Contacts<span class="nav-badge nb-green" id="nb-contacts">7 880</span></div>
-    <div class="nav-item" data-v="scraping" onclick="showView('scraping')"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07M8.46 8.46a5 5 0 0 0 0 7.07"/></svg>Scraping</div>
+    <div class="nav-item" id="nav-scraping" data-v="scraping" onclick="showView('scraping')"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07M8.46 8.46a5 5 0 0 0 0 7.07"/></svg>Scraping</div>
   </nav>
       <div class="nav-sec" style="margin-top:8px">Ressources</div>
     <div class="nav-item" data-v="technologies" onclick="showView('technologies')"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07M8.46 8.46a5 5 0 0 0 0 7.07"/></svg>Technologies</div>
@@ -727,10 +727,10 @@ input.date-input:focus{border-color:#3b82f6}
 
     <div id="view-dashboard" class="view active">
       <div class="kpi-grid">
-        <div class="kpi-card clickable" style="--acc:linear-gradient(90deg,#3b82f6,#2563eb)" onclick="showView('companies')"><div class="kpi-label">Toutes Entreprises</div><div class="kpi-value" id="kpi-master">10 049</div><div class="kpi-sub">Base complète DCM</div><div class="kpi-icon">🏭</div></div>
+        <div class="kpi-card clickable" style="--acc:linear-gradient(90deg,#3b82f6,#2563eb)" onclick="showView('companies')"><div class="kpi-label">Toutes Entreprises</div><div class="kpi-value" id="kpi-master">10 049</div><div class="kpi-sub">Base complète</div><div class="kpi-icon">🏭</div></div>
         <div class="kpi-card clickable" style="--acc:linear-gradient(90deg,#f59e0b,#d97706)" onclick="showView('companies')"><div class="kpi-label">Cibles Prioritaires</div><div class="kpi-value" id="kpi-prio">291</div><div class="kpi-sub">Flexo + Hélio confirmés</div><div class="kpi-icon">⭐</div></div>
         <div class="kpi-card clickable" style="--acc:linear-gradient(90deg,#10b981,#059669)" onclick="showView('map')"><div class="kpi-label">Pays Couverts</div><div class="kpi-value" id="kpi-countries">—</div><div class="kpi-sub">→ Carte interactive</div><div class="kpi-icon">🌍</div></div>
-        <div class="kpi-card clickable" style="--acc:linear-gradient(90deg,#8b5cf6,#7c3aed)" onclick="showView('contacts')"><div class="kpi-label">Contacts</div><div class="kpi-value" id="kpi-contacts-val">7 880</div><div class="kpi-sub">DCM + Enrichis</div><div class="kpi-icon">👤</div></div>
+        <div class="kpi-card clickable" style="--acc:linear-gradient(90deg,#8b5cf6,#7c3aed)" onclick="showView('contacts')"><div class="kpi-label">Contacts</div><div class="kpi-value" id="kpi-contacts-val">7 880</div><div class="kpi-sub">Base + Enrichis</div><div class="kpi-icon">👤</div></div>
         <div class="kpi-card clickable" style="--acc:linear-gradient(90deg,#ec4899,#db2777)" onclick="showView('pipeline')"><div class="kpi-label">En Suivi</div><div class="kpi-value" id="kpi-pipeline">—</div><div class="kpi-sub">Contacté + Client</div><div class="kpi-icon">📈</div></div>
       </div>
       <div class="pipeline-grid" id="pipeline-mini"></div>
@@ -804,7 +804,7 @@ input.date-input:focus{border-color:#3b82f6}
         <div class="toggle-group">
           <button class="toggle-btn on" onclick="filterContactsSource('',this)">Tous (7 880)</button>
           <button class="toggle-btn" onclick="filterContactsSource('enrichi',this)">Enrichis (18)</button>
-          <button class="toggle-btn" onclick="filterContactsSource('dcm',this)">DCM (7 862)</button>
+          <button class="toggle-btn" onclick="filterContactsSource('dcm',this)">Base (7 862)</button>
         </div>
         <span class="count-badge" id="contacts-count"></span>
         <button class="btn btn-ghost btn-sm" onclick="exportContactsCSV()" style="margin-left:auto">⬇ CSV</button>
@@ -824,19 +824,7 @@ input.date-input:focus{border-color:#3b82f6}
             <div style="font-size:22px;margin-bottom:10px">🌐</div>
             <div style="font-weight:700;color:#e2e8f0;font-size:13px;margin-bottom:6px">Web scraping</div>
             <div style="font-size:11px;color:#64748b;margin-bottom:14px">Extraction automatique depuis les sites web des entreprises.</div>
-            <button class="btn btn-primary btn-sm" onclick="runScrape('web')" style="width:100%">Lancer</button>
-          </div>
-          <div style="background:#1e293b;border:1px solid #334155;border-radius:10px;padding:20px">
-            <div style="font-size:22px;margin-bottom:10px">🔗</div>
-            <div style="font-weight:700;color:#e2e8f0;font-size:13px;margin-bottom:6px">LinkedIn</div>
-            <div style="font-size:11px;color:#64748b;margin-bottom:14px">Recherche de contacts et d'informations via LinkedIn.</div>
-            <button class="btn btn-primary btn-sm" onclick="runScrape('linkedin')" style="width:100%">Lancer</button>
-          </div>
-          <div style="background:#1e293b;border:1px solid #334155;border-radius:10px;padding:20px">
-            <div style="font-size:22px;margin-bottom:10px">📋</div>
-            <div style="font-weight:700;color:#e2e8f0;font-size:13px;margin-bottom:6px">Interpack</div>
-            <div style="font-size:11px;color:#64748b;margin-bottom:14px">Exposants et entreprises du salon mondial de l'emballage.</div>
-            <button class="btn btn-primary btn-sm" onclick="runScrape('interpack')" style="width:100%">Lancer</button>
+            <button class="btn btn-primary btn-sm" id="scrape-btn-web" onclick="var b=this;setButtonLoading(b,true);runScrape('web').finally(()=>setButtonLoading(b,false))" style="width:100%">Lancer</button>
           </div>
         </div>
         <div style="margin-top:24px;background:#1e293b;border:1px solid #334155;border-radius:10px;padding:20px">
@@ -1402,6 +1390,9 @@ function showView(v){
   else if(v==='pipeline') renderPipeline();
   else if(v==='contacts'){STATE.cPage=1;renderContacts();}
   else if(v==='technologies') renderTechnologies();
+  else if(v==='scraping'){
+    if(!canAccessScraping()){ showView('dashboard'); return; }
+  }
   else if(v==='supabase'){
     // During boot (no session) silently fall back to dashboard instead of alerting
     if(!sessionStorage.getItem('user_email')){ showView('dashboard'); return; }
@@ -1828,6 +1819,18 @@ function updateApiKeyBadge(){
   updateApiStatus();
 }
 
+function setButtonLoading(btn, state) {
+  if (!btn) return;
+  if (state) {
+    btn.disabled = true;
+    btn.dataset.origText = btn.textContent;
+    btn.innerHTML = '<span style="display:inline-block;width:10px;height:10px;border:2px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;margin-right:6px;vertical-align:middle"></span>Running...';
+  } else {
+    btn.disabled = false;
+    btn.textContent = btn.dataset.origText || 'Lancer';
+  }
+}
+
 async function scrapeCompany(id){
   if(!canEdit()){ alert('Accès refusé'); return; }
   const co=CRM_DATA.companies.find(x=>x.id===id);
@@ -1870,13 +1873,6 @@ Recherche et retourne UNIQUEMENT ce JSON:
 }`;
 
   const apiKey=getApiKey();
-  if(!apiKey){
-    panel.classList.add('open');
-    content.innerHTML=`<div class="apikey-banner"><div style="font-size:20px">🔑</div><div style="flex:1"><p><strong>Clé API Anthropic requise</strong> pour la recherche web.<br>Entrez votre clé <code style="background:#0f172a;padding:1px 5px;border-radius:3px">sk-ant-...</code> dans les paramètres (bas de la barre gauche) ou directement ci-dessous.</p><div class="apikey-input-wrap"><input class="apikey-input" id="apikey-input-field" placeholder="sk-ant-api03-..." type="password"><button class="btn btn-primary btn-sm apikey-set" onclick="setApiKey();scrapeCompany(${id})">Enregistrer & Lancer</button></div></div></div>`;
-    btn.classList.remove('loading');
-    btn.textContent='🔍 Rafraîchir';
-    return;
-  }
 
   try{
     const resp=await fetch('https://api.anthropic.com/v1/messages',{
@@ -2804,9 +2800,9 @@ function renderTechnologies(){
   <div class="tech-card tech-full" style="background:linear-gradient(135deg,rgba(30,58,138,.18),rgba(88,28,135,.12));border-color:rgba(59,130,246,.35)">
     <div class="tech-hdr">
       <div class="tech-ico" style="background:rgba(30,58,138,.4);border:1px solid rgba(59,130,246,.4)">🔄</div>
-      <div><h3>Opérateurs bi-technologie (Flexo + Hélio)</h3><p>${bothCo} entreprises dans la base DCM</p></div>
+      <div><h3>Opérateurs bi-technologie (Flexo + Hélio)</h3><p>${bothCo} entreprises dans la Base</p></div>
     </div>
-    <p class="tech-desc">Imprimeurs maîtrisant les deux procédés — profil cible prioritaire DCM. Ces acteurs maximisent la flexibilité client, offrent conseil technique comparatif, et représentent les partenaires à plus forte valeur commerciale.</p>
+    <p class="tech-desc">Imprimeurs maîtrisant les deux procédés — profil cible prioritaire. Ces acteurs maximisent la flexibilité client, offrent conseil technique comparatif, et représentent les partenaires à plus forte valeur commerciale.</p>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
       <div class="tech-section">
         <h4>Salons & Événements</h4>
@@ -4228,6 +4224,10 @@ function getCurrentRole() { return sessionStorage.getItem('user_role') || 'viewe
 function canCreate()      { return ['admin','editor'].includes(getCurrentRole()); }
 function canEdit()        { return ['admin','editor'].includes(getCurrentRole()); }
 function canDelete()      { return getCurrentRole() === 'admin'; }
+function canAccessScraping() {
+  var email = sessionStorage.getItem('user_email') || '';
+  return email === 'admin@mate-crm.fr';
+}
 
 document.getElementById("current-user").textContent =
   sessionStorage.getItem("user_email") || "Admin";
@@ -4761,6 +4761,8 @@ document.getElementById("current-user").textContent =
     document.getElementById('login-screen').style.display = 'none';
     document.getElementById('sidebar').style.display = '';
     document.getElementById('main').style.display = '';
+    var _ns = document.getElementById('nav-scraping');
+    if (_ns) _ns.style.display = canAccessScraping() ? '' : 'none';
   }
   // Init Supabase client — constants first, localStorage as fallback
   const sbUrl  = (typeof SUPABASE_URL      !== 'undefined' && SUPABASE_URL)      || localStorage.getItem('dcm_supabase_url')  || '';
