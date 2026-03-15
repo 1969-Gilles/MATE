@@ -41,6 +41,7 @@ nav{flex:1;padding:8px 0;overflow-y:auto}
 #view-map{display:none;height:calc(100vh - 52px)}
 #view-map.active{display:flex;flex-direction:row}
 .map-panel{flex:1;background:#0f172a;position:relative;overflow:hidden;min-width:0}
+#map-svg-wrap{position:absolute!important;top:90px;left:0;right:0;bottom:0;width:auto!important;height:auto!important}
 /* KPI */
 .kpi-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:18px}
 .kpi-card{background:#1e293b;border:1px solid #334155;border-radius:10px;padding:15px;position:relative;overflow:hidden}
@@ -238,10 +239,10 @@ input.date-input:focus{border-color:#3b82f6}
 .tt-name{font-weight:700;color:#f1f5f9;margin-bottom:4px;font-size:13px}
 .tt-count{color:#60a5fa;font-weight:800;font-size:18px;line-height:1}
 .tt-row{font-size:10px;color:#94a3b8;margin-top:2px}
-.map-mode-bar{position:absolute;top:14px;left:50%;transform:translateX(-50%);display:flex;background:rgba(15,23,42,.9);border:1px solid #334155;border-radius:8px;padding:3px;gap:2px;z-index:5}
+.map-mode-bar{position:absolute;top:100px;left:50%;transform:translateX(-50%);display:flex;background:rgba(15,23,42,.9);border:1px solid #334155;border-radius:8px;padding:3px;gap:2px;z-index:5}
 .mmb{padding:5px 14px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;border:none;background:transparent;color:#64748b;transition:.15s;white-space:nowrap}
 .mmb.on{background:#2563eb;color:#fff}
-.map-ctrl{position:absolute;top:14px;right:14px;display:flex;flex-direction:column;gap:5px;z-index:5}
+.map-ctrl{position:absolute;top:100px;right:14px;display:flex;flex-direction:column;gap:5px;z-index:5}
 .mctrl{background:rgba(30,41,59,.9);border:1px solid #334155;color:#94a3b8;width:30px;height:30px;border-radius:7px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:.15s}
 .mctrl:hover{background:#334155;color:#e2e8f0}
 .map-legend{position:absolute;bottom:18px;left:18px;background:rgba(15,23,42,.88);border:1px solid #334155;border-radius:9px;padding:11px 14px;z-index:5}
@@ -250,6 +251,23 @@ input.date-input:focus{border-color:#3b82f6}
 .ls{width:18px;height:11px;border-radius:2px}
 .legend-labels{display:flex;justify-content:space-between;font-size:9px;color:#64748b;margin-top:3px}
 .map-counters{position:absolute;bottom:18px;right:16px;background:rgba(15,23,42,.88);border:1px solid #334155;border-radius:8px;padding:8px 14px;display:flex;gap:16px;z-index:5}
+.map-events-bar{position:absolute;top:0;left:0;right:0;height:82px;background:rgba(13,19,33,.96);border-bottom:1px solid #1e293b;padding:0 16px;z-index:6;display:flex;align-items:center;gap:14px;box-shadow:0 2px 14px rgba(0,0,0,.45)}
+.mev-head{display:flex;align-items:center;gap:8px;flex-shrink:0;white-space:nowrap;padding-right:12px;border-right:1px solid #1e293b}
+.mev-head h3{font-size:11px;font-weight:700;color:#e2e8f0;margin:0}
+.mev-kicker{font-size:8px;font-weight:700;color:#3b82f6;text-transform:uppercase;letter-spacing:.9px;margin-bottom:2px}
+.mev-sub{display:none}
+.mev-list{display:flex;flex-direction:row;gap:8px;overflow-x:auto;flex:1;align-items:center;scrollbar-width:thin;scrollbar-color:#334155 transparent;padding:2px 0}
+.mev-list::-webkit-scrollbar{height:3px}.mev-list::-webkit-scrollbar-track{background:transparent}.mev-list::-webkit-scrollbar-thumb{background:#334155;border-radius:2px}
+.mev-empty{font-size:10px;color:#475569;font-style:italic;white-space:nowrap;padding:0 4px}
+.mev-item{flex-shrink:0;padding:6px 10px;background:rgba(30,41,59,.7);border:1px solid #1e293b;border-radius:7px;transition:.15s;max-width:190px;cursor:pointer}
+.mev-item:hover{border-color:#334155;background:rgba(30,41,59,1)}
+.mev-item a{text-decoration:none}
+.mev-date{font-size:9px;color:#3b82f6;font-weight:700;margin-bottom:1px;white-space:nowrap}
+.mev-title{font-size:10px;color:#e2e8f0;font-weight:600;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:170px}
+.mev-title a{color:#e2e8f0}
+.mev-title a:hover{color:#60a5fa}
+.mev-meta{font-size:9px;color:#64748b;display:flex;align-items:center;gap:5px;margin-top:2px;overflow:hidden;white-space:nowrap}
+.mev-type{font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#7c3aed;background:rgba(124,58,237,.12);border:1px solid rgba(124,58,237,.2);border-radius:3px;padding:1px 4px;white-space:nowrap}
 .mc-val{font-size:17px;font-weight:800;color:#60a5fa}
 .mc-val.green{color:#4ade80}
 .mc-lbl{font-size:9px;color:#64748b;margin-top:1px}
@@ -758,6 +776,19 @@ input.date-input:focus{border-color:#3b82f6}
     <div id="view-map" class="view">
       <div class="map-panel" id="map-panel">
         <div id="map-svg-wrap" style="width:100%;height:100%"></div>
+        <div class="map-events-bar" id="map-events-bar">
+          <div class="mev-head">
+            <div>
+              <div class="mev-kicker">Business Watch</div>
+              <h3>📅 Upcoming Events</h3>
+            </div>
+            <button class="btn btn-ghost btn-sm" id="map-events-more" type="button">View all</button>
+          </div>
+          <div class="mev-sub">Trade shows, conferences and networking opportunities for the packaging / flexo / gravure industry.</div>
+          <div class="mev-list" id="map-events-list">
+            <div class="mev-empty">No events loaded yet.</div>
+          </div>
+        </div>
         <div class="map-tooltip" id="map-tooltip"></div>
         <div class="map-mode-bar">
           <button class="mmb on" data-mode="all" onclick="setMapMode('all',this)">Toutes les entreprises</button>
@@ -1386,7 +1417,7 @@ function showView(v){
   // Render
   if(v==='dashboard') renderDashboard();
   else if(v==='companies'){STATE.page=1;renderCompanies();}
-  else if(v==='map') initMap();
+  else if(v==='map'){ initMap(); loadMapEvents(); }
   else if(v==='pipeline') renderPipeline();
   else if(v==='contacts'){STATE.cPage=1;renderContacts();}
   else if(v==='technologies') renderTechnologies();
@@ -1400,6 +1431,151 @@ function showView(v){
   }
 }
 
+// ─── MAP EVENTS ──────────────────────────────────────────────────────────────
+function _fmtEventDate(dateStr) {
+  if (!dateStr) return '';
+  try {
+    const d = new Date(dateStr);
+    return d.toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' });
+  } catch(_) { return dateStr.slice(0, 10); }
+}
+async function loadMapEvents() {
+  const list = document.getElementById('map-events-list');
+  if (!list) return;
+  const now = new Date().toISOString();
+  const params = 'select=id,title,event_date,end_date,country_code,city,event_type,source_url'
+    + '&status=eq.upcoming'
+    + '&event_date=gte.' + now
+    + '&order=event_date.asc'
+    + '&limit=5';
+  try {
+    const rows = await sbSelect('events', params);
+    if (!rows || !Array.isArray(rows) || rows.length === 0) {
+      list.innerHTML = '<div class="mev-empty">No upcoming events.</div>';
+      return;
+    }
+    list.innerHTML = rows.map(ev => {
+      const title = esc(ev.title || '—');
+      const titleHtml = ev.source_url
+        ? `<a href="${esc(ev.source_url)}" target="_blank" rel="noopener">${title}</a>`
+        : title;
+      const dateLine = _fmtEventDate(ev.event_date);
+      const meta = [ev.city, ev.country_code].filter(Boolean).map(esc).join(', ');
+      const typeBadge = ev.event_type
+        ? `<span class="mev-type">${esc(ev.event_type)}</span>` : '';
+      return `<div class="mev-item">
+        <div class="mev-date">${dateLine}</div>
+        <div class="mev-title">${titleHtml}</div>
+        <div class="mev-meta">${meta ? `<span>${meta}</span>` : ''}${typeBadge}</div>
+      </div>`;
+    }).join('');
+    _lastMapEvents = rows;
+    renderEventMarkers(rows);
+  } catch(err) {
+    console.error('[loadMapEvents]', err);
+    list.innerHTML = '<div class="mev-empty">Unable to load events.</div>';
+  }
+}
+
+// ─── EVENT MARKERS ON MAP ────────────────────────────────────────────────────
+const _ISO2_ISO3 = {
+  'AF':'AFG','AL':'ALB','DZ':'DZA','AO':'AGO','AR':'ARG','AM':'ARM','AU':'AUS','AT':'AUT',
+  'AZ':'AZE','BH':'BHR','BD':'BGD','BE':'BEL','BY':'BLR','BO':'BOL','BA':'BIH','BW':'BWA',
+  'BR':'BRA','BG':'BGR','BF':'BFA','CM':'CMR','CA':'CAN','CL':'CHL','CN':'CHN','CO':'COL',
+  'CG':'COG','CD':'COD','CR':'CRI','HR':'HRV','CY':'CYP','CZ':'CZE','DK':'DNK','EC':'ECU',
+  'EG':'EGY','SV':'SLV','EE':'EST','ET':'ETH','FI':'FIN','FR':'FRA','GA':'GAB','DE':'DEU',
+  'GH':'GHA','GR':'GRC','GT':'GTM','GN':'GIN','HN':'HND','HK':'HKG','HU':'HUN','IS':'ISL',
+  'IN':'IND','ID':'IDN','IR':'IRN','IQ':'IRQ','IE':'IRL','IL':'ISR','IT':'ITA','JP':'JPN',
+  'JO':'JOR','KZ':'KAZ','KE':'KEN','KW':'KWT','LV':'LVA','LB':'LBN','LT':'LTU','LU':'LUX',
+  'MG':'MDG','MW':'MWI','MY':'MYS','ML':'MLI','MX':'MEX','MD':'MDA','ME':'MNE','MA':'MAR',
+  'MZ':'MOZ','NL':'NLD','NZ':'NZL','NG':'NGA','NO':'NOR','OM':'OMN','PK':'PAK','PS':'PSE',
+  'PA':'PAN','PY':'PRY','PE':'PER','PH':'PHL','PL':'POL','PT':'PRT','QA':'QAT','RO':'ROU',
+  'RU':'RUS','RW':'RWA','SA':'SAU','SN':'SEN','RS':'SRB','SK':'SVK','SI':'SVN','SL':'SLE',
+  'SG':'SGP','ZA':'ZAF','KR':'KOR','ES':'ESP','LK':'LKA','SE':'SWE','CH':'CHE','SY':'SYR',
+  'TW':'TWN','TZ':'TZA','TH':'THA','TG':'TGO','TT':'TTO','TN':'TUN','TR':'TUR','UG':'UGA',
+  'UA':'UKR','AE':'ARE','GB':'GBR','US':'USA','UY':'URY','UZ':'UZB','VE':'VEN','VN':'VNM',
+  'YE':'YEM','ZM':'ZMB','ZW':'ZWE','CI':'CIV','MK':'MKD','GE':'GEO','DO':'DOM','MU':'MUS'
+};
+const _EV_COLORS = { conference:'#7c3aed', trade_show:'#2563eb', networking:'#10b981' };
+let _lastMapEvents = [];
+
+function renderEventMarkers(events) {
+  if (!MAP.svg || !MAP.proj || !MAP.world || !events || !events.length) {
+    if (MAP.svg) MAP.svg.select('g').selectAll('.evt-marker-group').remove();
+    return;
+  }
+  // Build ISO-3 → centroid from world features
+  const features = topojson.feature(MAP.world, MAP.world.objects.countries).features;
+  const centroids = {};
+  features.forEach(f => {
+    const iso3 = n2a3(f.id);
+    if (!iso3) return;
+    const pt = MAP.path.centroid(f);
+    if (pt && !isNaN(pt[0]) && !isNaN(pt[1])) centroids[iso3] = pt;
+  });
+  const g = MAP.svg.select('g');
+  g.selectAll('.evt-marker-group').remove();
+  const mg = g.append('g').attr('class', 'evt-marker-group');
+  const tt   = document.getElementById('map-tooltip');
+  const wrap = document.getElementById('map-svg-wrap');
+
+  // Inline SVG path data for each event_type (12x12 coordinate space, centered at 6,6)
+  const _ICONS = {
+    // Microphone: base + stand + head
+    conference: { color:'#7c3aed', path:'M6 1 C4.3 1 3 2.3 3 4 L3 7 C3 8.7 4.3 10 6 10 C7.7 10 9 8.7 9 7 L9 4 C9 2.3 7.7 1 6 1 Z M2 6.5 C2 9.5 3.8 11 6 11 C8.2 11 10 9.5 10 6.5 M6 11 L6 13 M4 13 L8 13' },
+    // Booth star: 5-pointed star
+    trade_show: { color:'#2563eb', path:'M6 1 L7.1 4.2 L10.5 4.2 L7.9 6.3 L8.9 9.5 L6 7.5 L3.1 9.5 L4.1 6.3 L1.5 4.2 L4.9 4.2 Z' },
+    // People / handshake: two figures
+    networking: { color:'#10b981', path:'M3.5 4 A1.5 1.5 0 1 0 3.5 1 A1.5 1.5 0 0 0 3.5 4 Z M8.5 4 A1.5 1.5 0 1 0 8.5 1 A1.5 1.5 0 0 0 8.5 4 Z M1 9 C1 7 2 6 3.5 6 C4.3 6 5 6.3 5.5 7 C6 6.3 6.7 6 7.5 6 C9 6 11 7 11 9' }
+  };
+  const _DEFAULT = { color:'#f59e0b', path:'M6 1 A5 5 0 1 0 6 11 A5 5 0 0 0 6 1 Z M6 3 L6 7 M6 9 L6 9.5' };
+
+  events.forEach(ev => {
+    const cc2  = (ev.country_code || '').trim().toUpperCase();
+    const iso3 = _ISO2_ISO3[cc2];
+    if (!iso3 || !centroids[iso3]) return;
+    const [x, y] = centroids[iso3];
+    const icon  = _ICONS[ev.event_type] || _DEFAULT;
+    const color = icon.color;
+    const S = 14; // icon box size in px, scale from 12-unit space
+    const node = mg.append('g')
+      .attr('class', 'evt-marker')
+      .attr('transform', `translate(${x - S/2}, ${y - S/2})`)
+      .style('cursor', ev.source_url ? 'pointer' : 'default');
+    // Backdrop circle for legibility
+    node.append('circle')
+      .attr('cx', S/2).attr('cy', S/2).attr('r', S/2 + 2)
+      .attr('fill', '#0f172a').attr('fill-opacity', 0.72)
+      .attr('stroke', color).attr('stroke-width', 1).attr('stroke-opacity', 0.6);
+    // Icon path, scaled from 12-unit space to S px
+    node.append('path')
+      .attr('d', icon.path)
+      .attr('transform', `scale(${S/12})`)
+      .attr('fill', color).attr('fill-opacity', 0.9)
+      .attr('stroke', color).attr('stroke-width', 0.4)
+      .attr('stroke-linecap', 'round').attr('stroke-linejoin', 'round');
+    // Invisible larger hit target
+    node.append('rect')
+      .attr('x', -4).attr('y', -4).attr('width', S + 8).attr('height', S + 8)
+      .attr('fill', 'transparent');
+    // Hover + click
+    node.on('mousemove', function(event) {
+      if (!tt || !wrap) return;
+      const box = wrap.getBoundingClientRect();
+      const mx  = event.clientX - box.left;
+      const my  = event.clientY - box.top;
+      const W   = wrap.clientWidth  || 900;
+      const H   = wrap.clientHeight || 560;
+      tt.style.cssText = `opacity:1;left:${mx > W-200 ? mx-165 : mx+14}px;top:${my > H-100 ? my-80 : my-10}px`;
+      const meta = [ev.city, ev.country_code].filter(Boolean).join(', ');
+      tt.innerHTML = `<div class="tt-name" style="color:${color}">${esc(ev.title||'—')}</div>
+        <div class="tt-row">${_fmtEventDate(ev.event_date)}</div>
+        ${meta ? `<div class="tt-row" style="color:#64748b">${esc(meta)}</div>` : ''}`;
+    })
+    .on('mouseleave', () => { if (tt) tt.style.opacity = 0; })
+    .on('click', () => { if (ev.source_url) window.open(ev.source_url, '_blank', 'noopener'); });
+  });
+}
 // ─── DASHBOARD ───────────────────────────────────────────────────────────────
 let CHARTS={};
 function renderDashboard(){
@@ -3176,6 +3352,7 @@ function buildMap(){
 
   updateMapStats(cidx);
   updateLegend(maxC);
+  if (_lastMapEvents.length) renderEventMarkers(_lastMapEvents);
 }
 
 function redrawMap(){
