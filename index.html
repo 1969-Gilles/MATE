@@ -4851,19 +4851,21 @@ document.getElementById("current-user").textContent =
       <div style="font-size:18px;font-weight:800;color:#f1f5f9">CRM Global Flexo &amp; H&#233;lio</div>
       <div style="font-size:11px;color:#475569;margin-top:4px">Connectez-vous pour continuer</div>
     </div>
+    <form id="login-form" onsubmit="event.preventDefault();doLogin()">
     <div style="margin-bottom:12px">
       <label style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.8px;display:block;margin-bottom:5px">Email</label>
-      <input id="login-email" type="email" placeholder="votre@email.fr" style="width:100%;background:#0f172a;border:1px solid #334155;border-radius:7px;padding:8px 12px;color:#e2e8f0;font-size:12px;outline:none">
+      <input id="login-email" type="email" name="email" autocomplete="username" placeholder="votre@email.fr" style="width:100%;background:#0f172a;border:1px solid #334155;border-radius:7px;padding:8px 12px;color:#e2e8f0;font-size:12px;outline:none">
     </div>
     <div style="margin-bottom:20px">
       <label style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.8px;display:block;margin-bottom:5px">Mot de passe</label>
       <div style="display:flex;align-items:center;gap:8px">
-        <input id="login-password" type="password" placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;" style="flex:1;background:#0f172a;border:1px solid #334155;border-radius:7px;padding:8px 12px;color:#e2e8f0;font-size:12px;outline:none" onkeydown="if(event.key==='Enter')doLogin()">
+        <input id="login-password" type="password" name="password" autocomplete="current-password" placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;" style="flex:1;background:#0f172a;border:1px solid #334155;border-radius:7px;padding:8px 12px;color:#e2e8f0;font-size:12px;outline:none">
         <button type="button" onclick="toggleLoginPassword()" style="background:#0f172a;border:1px solid #334155;border-radius:7px;padding:7px 10px;color:#64748b;font-size:13px;cursor:pointer;flex-shrink:0;transition:.15s" onmouseover="this.style.color='#e2e8f0'" onmouseout="this.style.color='#64748b'">👁</button>
       </div>
     </div>
     <div id="login-error" style="display:none;font-size:11px;color:#f87171;margin-bottom:12px;text-align:center"></div>
-    <button onclick="doLogin()" style="width:100%;background:#2563eb;border:none;border-radius:7px;padding:10px;color:#fff;font-size:13px;font-weight:700;cursor:pointer">Se connecter</button>
+    <button type="submit" style="width:100%;background:#2563eb;border:none;border-radius:7px;padding:10px;color:#fff;font-size:13px;font-weight:700;cursor:pointer">Se connecter</button>
+    </form>
   </div>
 </div>
 
