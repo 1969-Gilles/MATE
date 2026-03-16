@@ -141,6 +141,8 @@ input.date-input:focus{border-color:#3b82f6}
 .cfc-row a{color:#60a5fa;text-decoration:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.cfc-row a:hover{text-decoration:underline}
 .cfc-src{display:inline-block;margin-top:7px;padding:1px 7px;border-radius:4px;font-size:9px;font-weight:700;background:#1e3a8a;color:#93c5fd}
 .cfc-src.src-dcm{background:#334155;color:#94a3b8}
+.cfc-av-btn{cursor:pointer;transition:opacity .15s}.cfc-av-btn:hover{opacity:.8}
+.cfc-name-btn{cursor:pointer;color:#f1f5f9;text-decoration:none;background:none;border:none;padding:0;font:inherit;font-weight:700;font-size:13px}.cfc-name-btn:hover{color:#60a5fa}
 .kanban{display:grid;grid-template-columns:repeat(9,minmax(140px,1fr));gap:11px;align-items:start;overflow-x:auto}
 .kanban-col{background:#1e293b;border:1px solid #334155;border-radius:10px;padding:11px;min-height:160px}
 .kc-hdr{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between}
@@ -308,9 +310,6 @@ input.date-input:focus{border-color:#3b82f6}
 
 @media(max-width:768px){
 
-  /* Prevent horizontal overflow */
-  body{overflow-x:hidden}
-
   /* Hamburger visible */
   #menu-toggle{display:flex;align-items:center;justify-content:center}
 
@@ -324,40 +323,38 @@ input.date-input:focus{border-color:#3b82f6}
   }
   #sidebar.mobile-open{transform:translateX(0)}
 
-  /* Main area: full width, no overflow bleed */
-  #main{margin-left:0 !important;width:100%;overflow-x:hidden}
+  /* Main area: full width */
+  #main{margin-left:0 !important;width:100%}
 
-  /* Topbar: allow wrapping, keep usable on iPhone */
-  #topbar{padding-left:52px !important;flex-wrap:wrap;height:auto;min-height:52px;gap:6px}
+  /* Topbar: add left padding for hamburger */
+  #topbar{padding-left:56px !important}
   #topbar h2{font-size:13px}
 
   /* Search box smaller */
-  #search-box{width:130px !important;font-size:11px}
+  #search-box{width:140px !important;font-size:11px}
 
   /* Content area padding */
-  #content{padding:12px !important;overflow-x:hidden}
+  #content{padding:12px !important}
 
-  /* ── KPI Grid: 2 cols on tablet ── */
+  /* ── KPI Grid: 2 cols on tablet, 1 col on phone ── */
   .kpi-grid{grid-template-columns:repeat(2,1fr) !important;gap:8px !important}
   .kpi-value{font-size:20px !important}
 
-  /* ── Charts: stack vertically — real selector is .charts-grid ── */
-  .charts-grid{grid-template-columns:1fr !important;gap:12px !important}
+  /* ── Charts: stack vertically ── */
+  .chart-row{flex-direction:column !important;gap:12px !important}
   .chart-card{width:100% !important}
 
-  /* ── Top section ── */
+  /* ── Top section (top 20 targets) ── */
   .top-section{overflow-x:auto}
   .top-tbl{min-width:500px}
 
-  /* ── Tables: horizontal scroll with touch ── */
+  /* ── Tables: horizontal scroll ── */
   .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
   .data-table{min-width:600px}
 
-  /* ── Toolbars: wrap — real selectors are .toolbar and .contacts-toolbar ── */
-  .toolbar{flex-wrap:wrap !important;gap:6px !important}
-  .toolbar select,.toolbar input{font-size:11px !important;padding:5px 8px !important}
-  .contacts-toolbar{flex-wrap:wrap !important;gap:6px !important}
-  .contacts-toolbar select,.contacts-toolbar input{font-size:11px !important;padding:5px 8px !important}
+  /* ── Filters bar: wrap ── */
+  .filter-bar{flex-wrap:wrap !important;gap:6px !important}
+  .filter-bar select,.filter-bar input{font-size:11px !important;padding:5px 8px !important}
 
   /* ── Pagination: smaller ── */
   .pagination{flex-wrap:wrap;gap:4px}
@@ -381,18 +378,17 @@ input.date-input:focus{border-color:#3b82f6}
     scroll-snap-align:start;
   }
 
-  /* ── Map view: stack vertically on mobile — real selectors: #view-map, .map-panel, .drill-panel ── */
-  #view-map.active{flex-direction:column !important}
-  .map-panel{height:55vw !important;min-height:220px}
-  .drill-panel{width:100% !important;max-height:45vh;border-left:none !important;border-top:1px solid #334155}
+  /* ── Map: ensure full width ── */
+  #map-container{height:calc(100vh - 110px) !important}
+  #map-svg{width:100% !important}
 
-  /* ── Modal: full screen on mobile — real selector is #modal ── */
-  #modal{
+  /* ── Modal: full screen on mobile ── */
+  .modal-box{
     width:96vw !important;
     max-width:none !important;
-    max-height:88vh !important;
+    max-height:92vh !important;
+    margin:4vh auto !important;
     border-radius:12px !important;
-    padding:16px !important;
   }
 
   /* ── Contacts grid ── */
@@ -414,7 +410,6 @@ input.date-input:focus{border-color:#3b82f6}
   .kpi-grid{grid-template-columns:1fr !important}
   .pipeline-grid{grid-template-columns:1fr !important}
   #topbar h2{font-size:11px}
-  #search-box{width:100px !important}
 }
 
 
@@ -2619,13 +2614,57 @@ function filteredContacts(){
   if(STATE.cSource==='dcm')d=d.filter(c=>c.source!=='Enrichi');
   return d;
 }
+function openContactViewFromContacts(contactId){
+  contactId = Number(contactId);
+  const c = CRM_DATA.contacts.find(x => Number(x.id) === contactId);
+  if(!c){ alert('Contact introuvable'); return; }
+  const fullName = ((c.first_name||'')+' '+(c.last_name||'')).trim() || '—';
+  const role = (()=>{
+    if(c.role_id && REF_DATA.contact_roles){
+      const r = REF_DATA.contact_roles.find(r => r.id === Number(c.role_id));
+      if(r) return esc(r.name);
+    }
+    return c.title ? esc(c.title) : '—';
+  })();
+  const field = (icon, val) => val
+    ? `<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #1e3a5f;font-size:12px;color:#e2e8f0"><span style="color:#475569;width:14px;flex-shrink:0">${icon}</span><span>${val}</span></div>`
+    : '';
+  const modBtn = canEdit()
+    ? `<button class="btn btn-primary" style="flex:1" onclick="openEditContactFromView(${contactId})">✏ Modifier</button>`
+    : `<button class="btn" style="flex:1;opacity:.35;cursor:not-allowed" disabled>✏ Modifier</button>`;
+  const delBtn = canDelete()
+    ? `<button class="btn" style="flex:1;background:rgba(220,38,38,.15);border:1px solid rgba(220,38,38,.4);color:#fca5a5" onclick="closeModal();deleteContact(${contactId})">🗑 Supprimer</button>`
+    : '';
+  document.getElementById('modal-content').innerHTML = `
+    <div class="modal-hdr">
+      <div class="modal-icon" style="font-size:16px;line-height:1">👤</div>
+      <div class="modal-title">
+        <h2>${esc(fullName)}</h2>
+        <p>${esc(c.company||'—')}</p>
+      </div>
+    </div>
+    <div style="margin-bottom:16px">
+      ${field('💼', role !== '—' ? role : '')}
+      ${field('✉', c.email ? `<a href="mailto:${esc(c.email)}" style="color:#60a5fa;text-decoration:none">${esc(c.email)}</a>` : '')}
+      ${field('📞', c.phone ? `<a href="tel:${esc(c.phone)}" style="color:#60a5fa;text-decoration:none">${esc(c.phone)}</a>` : '')}
+      ${field('📍', [c.city, c.country].filter(Boolean).map(esc).join(', '))}
+      ${c.notes ? `<div style="margin-top:10px;padding:8px 10px;background:#0f172a;border-radius:7px;font-size:11px;color:#94a3b8;line-height:1.5">${esc(c.notes)}</div>` : ''}
+    </div>
+    <div style="display:flex;gap:8px;margin-top:4px">
+      <button class="btn btn-ghost" style="flex:1" onclick="closeModal()">✕ Fermer</button>
+      ${modBtn}
+      ${delBtn}
+    </div>`;
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
 function renderContacts(){
   const data=filteredContacts(),total=data.length;
   document.getElementById('contacts-count').textContent=`${total.toLocaleString()} contact${total>1?'s':''}`;
   const start=(STATE.cPage-1)*STATE.cPerPage,page=data.slice(start,start+STATE.cPerPage);
   console.log('[contactsView] edit button rendered for',page.length,'cards');
-  document.getElementById('contacts-grid').innerHTML=page.length===0?`<div class="empty-state" style="grid-column:1/-1"><p>Aucun contact trouvé</p></div>`:page.map((c,i)=>{const ini=esc(initials(c.first_name,c.last_name,c.company));const isEnr=c.source==='Enrichi';const isManuel=c.source==='Manuel';return `<div class="cfc"><div class="cfc-hdr"><div class="cfc-av" style="background:${grad(i)}">${ini}</div><div><div class="cfc-name">${c.first_name||c.last_name?esc(((c.first_name||'')+' '+(c.last_name||'')).trim()):'<em style="color:#475569">—</em>'}</div><div class="cfc-co">${esc(c.company||'')}</div><div class="cfc-title">${esc(c.title||'')}</div></div></div>${c.email?`<div class="cfc-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg><a href="mailto:${esc(c.email)}">${esc(c.email)}</a></div>`:''}${c.phone?`<div class="cfc-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.16 6.16l.87-.87a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg><a href="tel:${esc(c.phone)}">${esc(c.phone)}</a></div>`:''}${c.city||c.country?`<div class="cfc-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>${esc([c.city,c.country].filter(Boolean).join(', '))}</div>`:''}${c.notes?`<div style="margin-top:7px;padding:5px 8px;background:#0f172a;border-radius:5px;font-size:9px;color:#64748b;line-height:1.4">${esc(c.notes.slice(0,80))}${c.notes.length>80?'…':''}</div>`:''}  <span class="cfc-src${isEnr?'':' src-dcm'}">${isEnr?'Enrichi':isManuel?'Manuel':'DCM'}</span>
-    <div style="display:flex;gap:4px;margin-top:8px;justify-content:flex-end"><button onclick="event.stopPropagation();console.log('[contactsView] edit clicked',${c.id});openEditContactFromView(${c.id})" style="background:rgba(37,99,235,.15);border:1px solid rgba(37,99,235,.35);color:#60a5fa;border-radius:5px;padding:3px 9px;font-size:10px;font-weight:600;cursor:pointer" title="Modifier">✏ Modifier</button><button onclick="event.stopPropagation();deleteContact(${c.id})" style="background:rgba(127,29,29,.2);border:1px solid rgba(220,38,38,.3);color:#fca5a5;border-radius:5px;padding:3px 9px;font-size:10px;font-weight:600;cursor:pointer" title="Supprimer">🗑</button></div></div>`;}).join('');
+  document.getElementById('contacts-grid').innerHTML=page.length===0?`<div class="empty-state" style="grid-column:1/-1"><p>Aucun contact trouvé</p></div>`:page.map((c,i)=>{const ini=esc(initials(c.first_name,c.last_name,c.company));const isEnr=c.source==='Enrichi';const isManuel=c.source==='Manuel';return `<div class="cfc"><div class="cfc-hdr"><div class="cfc-av cfc-av-btn" style="background:${grad(i)}" onclick="openContactViewFromContacts(${c.id})" title="Voir le contact">${ini}</div><div><button class="cfc-name-btn" onclick="openContactViewFromContacts(${c.id})">${c.first_name||c.last_name?esc(((c.first_name||'')+' '+(c.last_name||'')).trim()):'<em style="color:#475569">—</em>'}</button><div class="cfc-co">${esc(c.company||'')}</div><div class="cfc-title">${esc(c.title||'')}</div></div></div>${c.email?`<div class="cfc-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg><a href="mailto:${esc(c.email)}">${esc(c.email)}</a></div>`:''}${c.phone?`<div class="cfc-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.16 6.16l.87-.87a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg><a href="tel:${esc(c.phone)}">${esc(c.phone)}</a></div>`:''}${c.city||c.country?`<div class="cfc-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>${esc([c.city,c.country].filter(Boolean).join(', '))}</div>`:''}${c.notes?`<div style="margin-top:7px;padding:5px 8px;background:#0f172a;border-radius:5px;font-size:9px;color:#64748b;line-height:1.4">${esc(c.notes.slice(0,80))}${c.notes.length>80?'…':''}</div>`:''}  <span class="cfc-src${isEnr?'':' src-dcm'}">${isEnr?'Enrichi':isManuel?'Manuel':'DCM'}</span>
+    <div style="display:flex;gap:4px;margin-top:8px;justify-content:flex-end"><button onclick="event.stopPropagation();openContactViewFromContacts(${c.id})" style="background:rgba(37,99,235,.15);border:1px solid rgba(37,99,235,.35);color:#60a5fa;border-radius:5px;padding:3px 9px;font-size:10px;font-weight:600;cursor:pointer" title="Voir / Modifier">✏ Modifier</button><button onclick="event.stopPropagation();deleteContact(${c.id})" style="background:rgba(127,29,29,.2);border:1px solid rgba(220,38,38,.3);color:#fca5a5;border-radius:5px;padding:3px 9px;font-size:10px;font-weight:600;cursor:pointer" title="Supprimer">🗑</button></div></div>`;}).join('');
   const pages=Math.ceil(total/STATE.cPerPage),el=document.getElementById('contacts-pagination');
   if(pages<=1){el.innerHTML='';return;}
   const p=STATE.cPage;let h='';
