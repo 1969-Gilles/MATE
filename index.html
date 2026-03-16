@@ -308,6 +308,9 @@ input.date-input:focus{border-color:#3b82f6}
 
 @media(max-width:768px){
 
+  /* Prevent horizontal overflow */
+  body{overflow-x:hidden}
+
   /* Hamburger visible */
   #menu-toggle{display:flex;align-items:center;justify-content:center}
 
@@ -321,38 +324,40 @@ input.date-input:focus{border-color:#3b82f6}
   }
   #sidebar.mobile-open{transform:translateX(0)}
 
-  /* Main area: full width */
-  #main{margin-left:0 !important;width:100%}
+  /* Main area: full width, no overflow bleed */
+  #main{margin-left:0 !important;width:100%;overflow-x:hidden}
 
-  /* Topbar: add left padding for hamburger */
-  #topbar{padding-left:56px !important}
+  /* Topbar: allow wrapping, keep usable on iPhone */
+  #topbar{padding-left:52px !important;flex-wrap:wrap;height:auto;min-height:52px;gap:6px}
   #topbar h2{font-size:13px}
 
   /* Search box smaller */
-  #search-box{width:140px !important;font-size:11px}
+  #search-box{width:130px !important;font-size:11px}
 
   /* Content area padding */
-  #content{padding:12px !important}
+  #content{padding:12px !important;overflow-x:hidden}
 
-  /* ── KPI Grid: 2 cols on tablet, 1 col on phone ── */
+  /* ── KPI Grid: 2 cols on tablet ── */
   .kpi-grid{grid-template-columns:repeat(2,1fr) !important;gap:8px !important}
   .kpi-value{font-size:20px !important}
 
-  /* ── Charts: stack vertically ── */
-  .chart-row{flex-direction:column !important;gap:12px !important}
+  /* ── Charts: stack vertically — real selector is .charts-grid ── */
+  .charts-grid{grid-template-columns:1fr !important;gap:12px !important}
   .chart-card{width:100% !important}
 
-  /* ── Top section (top 20 targets) ── */
+  /* ── Top section ── */
   .top-section{overflow-x:auto}
   .top-tbl{min-width:500px}
 
-  /* ── Tables: horizontal scroll ── */
+  /* ── Tables: horizontal scroll with touch ── */
   .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
   .data-table{min-width:600px}
 
-  /* ── Filters bar: wrap ── */
-  .filter-bar{flex-wrap:wrap !important;gap:6px !important}
-  .filter-bar select,.filter-bar input{font-size:11px !important;padding:5px 8px !important}
+  /* ── Toolbars: wrap — real selectors are .toolbar and .contacts-toolbar ── */
+  .toolbar{flex-wrap:wrap !important;gap:6px !important}
+  .toolbar select,.toolbar input{font-size:11px !important;padding:5px 8px !important}
+  .contacts-toolbar{flex-wrap:wrap !important;gap:6px !important}
+  .contacts-toolbar select,.contacts-toolbar input{font-size:11px !important;padding:5px 8px !important}
 
   /* ── Pagination: smaller ── */
   .pagination{flex-wrap:wrap;gap:4px}
@@ -376,17 +381,18 @@ input.date-input:focus{border-color:#3b82f6}
     scroll-snap-align:start;
   }
 
-  /* ── Map: ensure full width ── */
-  #map-container{height:calc(100vh - 110px) !important}
-  #map-svg{width:100% !important}
+  /* ── Map view: stack vertically on mobile — real selectors: #view-map, .map-panel, .drill-panel ── */
+  #view-map.active{flex-direction:column !important}
+  .map-panel{height:55vw !important;min-height:220px}
+  .drill-panel{width:100% !important;max-height:45vh;border-left:none !important;border-top:1px solid #334155}
 
-  /* ── Modal: full screen on mobile ── */
-  .modal-box{
+  /* ── Modal: full screen on mobile — real selector is #modal ── */
+  #modal{
     width:96vw !important;
     max-width:none !important;
-    max-height:92vh !important;
-    margin:4vh auto !important;
+    max-height:88vh !important;
     border-radius:12px !important;
+    padding:16px !important;
   }
 
   /* ── Contacts grid ── */
@@ -408,6 +414,7 @@ input.date-input:focus{border-color:#3b82f6}
   .kpi-grid{grid-template-columns:1fr !important}
   .pipeline-grid{grid-template-columns:1fr !important}
   #topbar h2{font-size:11px}
+  #search-box{width:100px !important}
 }
 
 
