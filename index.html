@@ -4619,6 +4619,37 @@ function canAccessScraping() {
   return email === 'admin@mate-crm.fr';
 }
 
+// ─── ROLE UI HELPER ──────────────────────────────────────────────────────────
+// Single source of truth for applying role-based UI state.
+// Enables OR disables controls — always call after role is known.
+function applyRoleUI() {
+  // ── "+ Ajouter" button ──────────────────────────────────────────────────────
+  var _btn = document.getElementById('btn-add-company');
+  if (_btn) {
+    if (canCreate()) {
+      // ENABLE: clear everything the IIFE may have set
+      _btn.style.opacity      = '';
+      _btn.style.pointerEvents = '';
+      _btn.removeAttribute('disabled');
+      _btn.title = '';
+    } else {
+      // DISABLE: viewer read-only
+      _btn.style.opacity      = '0.35';
+      _btn.style.pointerEvents = 'none';
+      _btn.title = 'Accès en lecture seule';
+    }
+  }
+  // ── Export / Supabase nav (admin-only) ──────────────────────────────────────
+  var isAdmin = getCurrentRole() === 'admin';
+  ['btn-export-companies', 'btn-export-contacts'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.style.display = isAdmin ? '' : 'none';
+  });
+  var _navSb = document.getElementById('nav-supabase');
+  if (_navSb) _navSb.style.display = isAdmin ? '' : 'none';
+}
+// ─────────────────────────────────────────────────────────────────────────────
+
 document.getElementById("current-user").textContent =
   sessionStorage.getItem("user_email") || "Admin";
 (function(){
@@ -4628,22 +4659,8 @@ document.getElementById("current-user").textContent =
     var rb = document.getElementById("current-role");
     if (rb) rb.textContent = '[' + sessionStorage.getItem("user_role") + ']';
   }
-  // Visually disable + Ajouter for viewer
-  var _btnAdd = document.getElementById('btn-add-company');
-  if (_btnAdd && !canCreate()) {
-    _btnAdd.style.opacity = '0.35';
-    _btnAdd.style.pointerEvents = 'none';
-    _btnAdd.title = 'Accès refusé';
-  }
-  // Hide Upload/Export controls for non-admin
-  if (getCurrentRole() !== 'admin') {
-    ['btn-export-companies','btn-export-contacts'].forEach(function(id) {
-      var el = document.getElementById(id);
-      if (el) el.style.display = 'none';
-    });
-    var _navSb = document.getElementById('nav-supabase');
-    if (_navSb) _navSb.style.display = 'none';
-  }
+  // Apply role-based UI (enable OR disable — never one-way only)
+  applyRoleUI();
 })();
 
 </script>
@@ -5207,19 +5224,11 @@ document.getElementById("current-user").textContent =
     // Load CRM data now that user is authenticated; always land on Dashboard
     if(typeof STATE !== 'undefined') STATE.view = 'dashboard';
     if(typeof init === 'function') init();
-    // Apply role-based UI restrictions after login
-    var _btnAddL = document.getElementById('btn-add-company');
-    if (_btnAddL && !canCreate()) {
-      _btnAddL.style.opacity = '0.35'; _btnAddL.style.pointerEvents = 'none';
-    }
-    if (resolveUserRole(email) !== 'admin') {
-      ['btn-export-companies','btn-export-contacts'].forEach(function(id) {
-        var el = document.getElementById(id);
-        if (el) el.style.display = 'none';
-      });
-      var _navSbL = document.getElementById('nav-supabase');
-      if (_navSbL) _navSbL.style.display = 'none';
-    }
+    // ── DEBUG (remove after validation) ──────────────────────────────────────
+    console.log("ROLE:", getCurrentRole());
+    console.log("PERMISSIONS:", { create: canCreate(), edit: canEdit(), delete: canDelete() });
+    // ── Apply role-based UI (enable OR disable) ───────────────────────────────
+    applyRoleUI();
   };
   window.toggleLoginPassword = function() {
     const el = document.getElementById('login-password');
