@@ -5190,6 +5190,19 @@ document.getElementById("current-user").textContent =
   const sbAnon = (typeof SUPABASE_ANON_KEY !== 'undefined' && SUPABASE_ANON_KEY) || localStorage.getItem('dcm_supabase_anon') || '';
   if (sbUrl && sbAnon) {
     window._sbClient = window.supabase.createClient(sbUrl, sbAnon);
+    // Auto-refresh JWT — met à jour sb_access_token à chaque renouvellement (~1h)
+    window._sbClient.auth.onAuthStateChange(function(event, session) {
+      if (session && session.access_token) {
+        sessionStorage.setItem('sb_access_token',  session.access_token);
+        sessionStorage.setItem('sb_refresh_token', session.refresh_token || '');
+      }
+      if (event === 'SIGNED_OUT') {
+        sessionStorage.removeItem('sb_access_token');
+        sessionStorage.removeItem('sb_refresh_token');
+        sessionStorage.removeItem('user_email');
+        sessionStorage.removeItem('user_role');
+      }
+    });
   }
 
   if (!sessionStorage.getItem('user_email')) {
