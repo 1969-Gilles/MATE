@@ -1638,7 +1638,7 @@ function renderDashboard(){
   };
 
   const top20=prio.filter(c=>c.confidence==='High').slice(0,20);
-  document.getElementById('top-tbl-body').innerHTML=top20.map(c=>`<tr onclick="openModal(${c.id})"><td style="font-weight:600;color:#f1f5f9">${esc(c.name)}</td><td style="color:#94a3b8">${esc(c.country||'')}</td><td>${techBadge(c.technology)}</td><td>${plPill(c.pipeline||'new')}</td><td>${prioHtml(c.priority||'medium')}</td></tr>`).join('');
+  document.getElementById('top-tbl-body').innerHTML=top20.map(c=>`<tr onclick="openModal(${c.id})"><td style="font-weight:600;color:#f1f5f9">${esc(c.name)}</td><td style="color:#94a3b8">${esc(c.country||'')}</td><td>${techBadge(c.technology)}</td><td>${plPill(normPipeline(c))}</td><td>${prioHtml(c.priority||'medium')}</td></tr>`).join('');
 }
 
 // ─── COMPANIES ───────────────────────────────────────────────────────────────
@@ -1683,7 +1683,7 @@ function renderCompanies(){
   const start=(STATE.page-1)*STATE.perPage,page=data.slice(start,start+STATE.perPage);
   document.getElementById('companies-tbody').innerHTML=page.length===0
     ?`<tr><td colspan="9"><div class="empty-state"><p>Aucune entreprise trouvée</p></div></td></tr>`
-    :page.map(c=>`<tr class="${c.is_priority?'is-priority':''}" onclick="openModal(${c.id})"><td title="${esc(c.name)}" style="font-weight:600;color:${c.is_priority?'#fbbf24':'#e2e8f0'}">${c.is_priority?'⭐ ':''}<span>${esc(c.name)}</span></td><td style="color:#94a3b8">${esc(c.country||'')}</td><td style="color:#64748b">${esc(c.city||'')}</td><td>${techBadge(c.technology)}</td><td>${plPill(c.pipeline||'new')}</td><td>${prioHtml(c.priority||'medium')}</td><td><span class="badge ${'b-'+(c.confidence||'').toLowerCase()}">${esc(c.confidence||'-')}</span></td><td style="text-align:center;color:${c.contact_count>0?'#4ade80':'#475569'}">${c.contact_count||'-'}</td><td onclick="event.stopPropagation()"><button class="btn btn-ghost btn-sm" onclick="openModal(${c.id})">Voir</button></td></tr>`).join('');
+    :page.map(c=>`<tr class="${c.is_priority?'is-priority':''}" onclick="openModal(${c.id})"><td title="${esc(c.name)}" style="font-weight:600;color:${c.is_priority?'#fbbf24':'#e2e8f0'}">${c.is_priority?'⭐ ':''}<span>${esc(c.name)}</span></td><td style="color:#94a3b8">${esc(c.country||'')}</td><td style="color:#64748b">${esc(c.city||'')}</td><td>${techBadge(c.technology)}</td><td>${plPill(normPipeline(c))}</td><td>${prioHtml(c.priority||'medium')}</td><td><span class="badge ${'b-'+(c.confidence||'').toLowerCase()}">${esc(c.confidence||'-')}</span></td><td style="text-align:center;color:${c.contact_count>0?'#4ade80':'#475569'}">${c.contact_count||'-'}</td><td onclick="event.stopPropagation()"><button class="btn btn-ghost btn-sm" onclick="openModal(${c.id})">Voir</button></td></tr>`).join('');
   renderPagination(total);
   document.getElementById('toggle-prio').className='toggle-btn'+(STATE.showPriorityOnly?' on':'');
   document.getElementById('toggle-all').className='toggle-btn'+(!STATE.showPriorityOnly?' on':'');
@@ -1968,7 +1968,7 @@ async function setPipeline(id, val){
   if(!canEdit()){ alert('Accès refusé'); return; }
   console.log('[setPipeline] clicked — id:', id, 'val:', val);
   try {
-    const payload = { pipeline: val, pipeline_code: val };
+    const payload = { pipeline_code: val };
     console.log('[setPipeline] payload:', JSON.stringify(payload));
     await sbUpdate('entreprises', id, payload);
     const c = await sbFetchCompany(id);
@@ -1978,9 +1978,8 @@ async function setPipeline(id, val){
       '| expected:', val,
       '| pipeline:', c.pipeline,
       '| pipeline_code:', c.pipeline_code);
-    // Sync mémoire
-    const idx = CRM_DATA.companies.findIndex(x => x.id === id);
-    if(idx >= 0) Object.assign(CRM_DATA.companies[idx], c);
+    // Sync mémoire — remplacement complet (pas Object.assign) pour éviter stale fields
+    updateCompanyInMemory(c);
     // Re-render from confirmed DB state regardless
     const activePipeline = c.pipeline_code || c.pipeline || 'new';
     const sr = document.getElementById('sr-' + id);
@@ -1989,8 +1988,10 @@ async function setPipeline(id, val){
         `<button class="status-btn${activePipeline === s ? ' sel' : ''}" onclick="setPipeline(${id},'${s}')">${PL_LABEL[s]}</button>`
       ).join('');
     }
+    console.log('PIPELINE UPDATED:', c.id, c.pipeline_code);
     if(verified){
       toast('Pipeline → ' + (PL_LABEL[val] || val));
+      renderDashboard();
       if(STATE.view === 'pipeline') renderPipeline();
     } else {
       toast('⚠ Pipeline non sauvegardé — vérifiez les droits RLS Supabase');
@@ -2616,6 +2617,12 @@ async function addContact(companyId){
 }
 
 // ─── PIPELINE ─────────────────────────────────────────────────────────────────
+function updateCompanyInMemory(updated) {
+  const idx = CRM_DATA.companies.findIndex(c => c.id === updated.id);
+  if (idx !== -1) {
+    CRM_DATA.companies[idx] = updated;
+  }
+}
 function normPipeline(c){ return PIPELINE_STAGES.includes(c.pipeline_code) ? c.pipeline_code : (PIPELINE_STAGES.includes(c.pipeline) ? c.pipeline : 'new'); }
 function renderPipeline(){
   const prio = CRM_DATA.companies.filter(c => c.is_priority);
@@ -3480,7 +3487,7 @@ function renderDrill(companies){
   const bgmap={flexo:'rgba(20,83,45,.4)',roto:'rgba(120,53,15,.4)',both:'rgba(30,58,138,.4)',pkg:'rgba(88,28,135,.3)',other:'#1e293b'};
   const emap={flexo:'🖨',roto:'🌀',both:'🔄',pkg:'📦',other:'🏭'};
   document.getElementById('drill-list').innerHTML=list.length===0?`<div class="drill-empty">Aucune entreprise</div>`
-    :list.map(c=>{const tc=techClass(c.technology);return `<div class="drill-item" onclick="openModal(${c.id})"><div class="di-icon" style="background:${bgmap[tc]}">${emap[tc]}</div><div style="flex:1;min-width:0"><div class="di-name">${c.is_priority?'<span style="color:#fbbf24">★</span> ':''}<span style="color:${c.is_priority?'#fbbf24':'#e2e8f0'}">${esc(c.name)}</span></div><div class="di-meta">${esc(c.city||'')}${c.city?' · ':''}${esc((c.technology||'').split(' ')[0])}</div></div><div>${plPill(c.pipeline||'new')}</div></div>`;}).join('');
+    :list.map(c=>{const tc=techClass(c.technology);return `<div class="drill-item" onclick="openModal(${c.id})"><div class="di-icon" style="background:${bgmap[tc]}">${emap[tc]}</div><div style="flex:1;min-width:0"><div class="di-name">${c.is_priority?'<span style="color:#fbbf24">★</span> ':''}<span style="color:${c.is_priority?'#fbbf24':'#e2e8f0'}">${esc(c.name)}</span></div><div class="di-meta">${esc(c.city||'')}${c.city?' · ':''}${esc((c.technology||'').split(' ')[0])}</div></div><div>${plPill(normPipeline(c))}</div></div>`;}).join('');
 }
 function searchDrill(q){MAP.drillQ=q;if(!MAP.sel)return;const cidx=countryIdx(STATE.mapMode);if(cidx[MAP.sel])renderDrill(cidx[MAP.sel]);}
 function exportDrill(name,companies){
@@ -3801,7 +3808,7 @@ async function sbInsert(table, row){
     method: 'POST',
     headers: {
       'apikey':        cfg.key,
-      'Authorization': 'Bearer ' + cfg.key,
+      'Authorization': 'Bearer ' + getAuthBearer(cfg),
       'Content-Type':  'application/json',
       'Prefer':        'return=minimal'
     },
@@ -3826,7 +3833,7 @@ async function sbSelect(table, params){
   const resp = await fetch(cfg.url + '/rest/v1/' + table + qs, {
     headers:{
       'apikey':        cfg.key,
-      'Authorization': 'Bearer ' + cfg.key,
+      'Authorization': 'Bearer ' + getAuthBearer(cfg),
       'Content-Type':  'application/json'
     }
   });
@@ -3843,7 +3850,7 @@ async function sbDelete(table, id){
     method: 'DELETE',
     headers:{
       'apikey':        cfg.key,
-      'Authorization': 'Bearer ' + cfg.key,
+      'Authorization': 'Bearer ' + getAuthBearer(cfg),
       'Content-Type':  'application/json',
       'Prefer':        'return=representation'
     }
@@ -3882,7 +3889,7 @@ async function sbUpdate(table, id, row){
     method: 'PATCH',
     headers:{
       'apikey':        cfg.key,
-      'Authorization': 'Bearer ' + cfg.key,
+      'Authorization': 'Bearer ' + getAuthBearer(cfg),
       'Content-Type':  'application/json',
       'Prefer':        'return=minimal'
     },
@@ -4415,6 +4422,11 @@ function getSupabaseCfg(){
   if(url && key) return { url, key };
   return {};
 }
+// Returns the JWT session token for authenticated requests.
+// Falls back to anon key only if no session exists (public reads).
+function getAuthBearer(cfg){
+  return sessionStorage.getItem('sb_access_token') || cfg.key;
+}
 
 function openSupabaseConfig(){
   if(getCurrentRole() !== 'admin'){ alert('Accès refusé'); return; }
@@ -4507,7 +4519,7 @@ async function fetchSupabaseContacts(){
     var resp  = await fetch(url, {
       headers:{
         'apikey': cfg.key,
-        'Authorization': 'Bearer ' + cfg.key,
+        'Authorization': 'Bearer ' + getAuthBearer(cfg),
         'Content-Type': 'application/json',
         'Prefer': 'return=representation'
       }
