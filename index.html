@@ -717,6 +717,71 @@ body.sidebar-collapsed .nav-icon{flex-shrink:0}
 .sb-contact-field{display:flex;align-items:center;gap:6px;font-size:10px;color:#94a3b8;margin-top:4px}
 .sb-contact-field span:first-child{font-size:12px;width:16px;text-align:center}
 
+/* ── TECHNICIENS ─────────────────────────────────────────────────────────── */
+.tech-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin-top:16px}
+.tech-card{background:#1e293b;border:1px solid #334155;border-radius:12px;padding:16px;cursor:pointer;transition:.15s;display:flex;flex-direction:column;gap:10px}
+.tech-card:hover{border-color:#3b82f6;background:#1e3a5f}
+.tech-card-header{display:flex;align-items:center;gap:12px}
+.tech-avatar{width:48px;height:48px;border-radius:50%;object-fit:cover;flex-shrink:0;background:#334155;border:2px solid #475569}
+.tech-avatar-placeholder{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#3b82f6,#6366f1);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#fff;flex-shrink:0}
+.tech-name{font-size:13px;font-weight:700;color:#f1f5f9}
+.tech-specialite{font-size:11px;color:#94a3b8;margin-top:2px}
+.tech-meta{display:flex;flex-wrap:wrap;gap:6px;font-size:10px}
+.tech-badge{padding:2px 8px;border-radius:20px;font-size:10px;font-weight:600}
+.tech-badge-actif{background:rgba(16,185,129,.15);color:#6ee7b7;border:1px solid rgba(16,185,129,.3)}
+.tech-badge-inactif{background:rgba(100,116,139,.15);color:#94a3b8;border:1px solid rgba(100,116,139,.3)}
+.tech-badge-zone{background:rgba(59,130,246,.12);color:#93c5fd;border:1px solid rgba(59,130,246,.2)}
+.tech-interventions-count{font-size:10px;color:#64748b;margin-top:4px}
+.tech-toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:4px}
+
+/* ── INTERVENTIONS ───────────────────────────────────────────────────────── */
+.intv-toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.intv-table-wrap{overflow-x:auto}
+.intv-table{width:100%;border-collapse:collapse;font-size:12px}
+.intv-table th{padding:8px 10px;text-align:left;font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.6px;border-bottom:1px solid #334155;background:#0f172a;position:sticky;top:0;z-index:1}
+.intv-table td{padding:9px 10px;border-bottom:1px solid #1e293b;vertical-align:middle;color:#e2e8f0}
+.intv-table tr:hover td{background:#1e293b}
+.intv-status{padding:2px 8px;border-radius:20px;font-size:10px;font-weight:600;white-space:nowrap}
+.intv-s-planifiee{background:rgba(59,130,246,.15);color:#93c5fd;border:1px solid rgba(59,130,246,.3)}
+.intv-s-confirmee{background:rgba(16,185,129,.15);color:#6ee7b7;border:1px solid rgba(16,185,129,.3)}
+.intv-s-en_cours{background:rgba(245,158,11,.15);color:#fcd34d;border:1px solid rgba(245,158,11,.3)}
+.intv-s-terminee{background:rgba(100,116,139,.15);color:#94a3b8;border:1px solid rgba(100,116,139,.3)}
+.intv-s-annulee{background:rgba(239,68,68,.12);color:#fca5a5;border:1px solid rgba(239,68,68,.2)}
+.intv-duree{font-size:10px;color:#94a3b8}
+.intv-type-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;flex-shrink:0}
+
+/* ── CALENDRIER TECHNICIENS ──────────────────────────────────────────────── */
+.cal-wrap{background:#1e293b;border:1px solid #334155;border-radius:12px;overflow:hidden;margin-top:16px}
+.cal-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid #334155;background:#0f172a}
+.cal-title{font-size:13px;font-weight:700;color:#f1f5f9}
+.cal-nav{display:flex;align-items:center;gap:8px}
+.cal-nav button{background:#1e293b;border:1px solid #334155;border-radius:6px;color:#94a3b8;padding:4px 10px;cursor:pointer;font-size:13px;transition:.15s}
+.cal-nav button:hover{background:#334155;color:#e2e8f0}
+.cal-grid{display:grid;grid-template-columns:120px repeat(7,1fr);border-left:1px solid #1e293b}
+.cal-col-header{padding:6px 4px;text-align:center;font-size:10px;font-weight:700;color:#64748b;border-bottom:1px solid #334155;border-right:1px solid #1e293b;background:#0f172a}
+.cal-col-header.today{color:#60a5fa;background:rgba(59,130,246,.08)}
+.cal-row-label{padding:6px 10px;font-size:11px;color:#94a3b8;border-right:1px solid #334155;border-bottom:1px solid #1e293b;display:flex;align-items:center;gap:8px;background:#0f172a;min-height:42px}
+.cal-cell{border-right:1px solid #1e293b;border-bottom:1px solid #1e293b;padding:3px;min-height:42px;vertical-align:top}
+.cal-event{border-radius:4px;padding:2px 5px;font-size:10px;font-weight:600;margin-bottom:2px;cursor:pointer;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;transition:.15s}
+.cal-event:hover{filter:brightness(1.2)}
+.cal-taux-bar{height:6px;border-radius:3px;background:#334155;margin-top:4px;overflow:hidden}
+.cal-taux-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,#3b82f6,#6366f1);transition:width .3s}
+.cal-taux-fill.warn{background:linear-gradient(90deg,#f59e0b,#ef4444)}
+.kpi-taux-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-bottom:16px}
+.kpi-taux-card{background:#1e293b;border:1px solid #334155;border-radius:10px;padding:12px 14px}
+.kpi-taux-name{font-size:11px;font-weight:700;color:#f1f5f9;margin-bottom:6px}
+.kpi-taux-pct{font-size:22px;font-weight:800;color:#60a5fa}
+.kpi-taux-label{font-size:10px;color:#64748b;margin-top:2px}
+
+/* ── FORM TECHNICIEN / INTERVENTION ─────────────────────────────────────── */
+.form-avatar-zone{display:flex;align-items:center;gap:16px;margin-bottom:16px}
+.form-avatar-preview{width:72px;height:72px;border-radius:50%;object-fit:cover;background:#334155;border:2px solid #475569;display:flex;align-items:center;justify-content:center;font-size:24px;color:#64748b;overflow:hidden}
+.form-avatar-preview img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.upload-btn{background:#1e3a5f;border:1px dashed #3b82f6;border-radius:8px;color:#60a5fa;padding:8px 14px;cursor:pointer;font-size:11px;transition:.15s}
+.upload-btn:hover{background:#1e40af22}
+.intv-dd-item{padding:8px 12px;cursor:pointer;font-size:12px;color:#f1f5f9;border-bottom:1px solid #334155}
+.intv-dd-item:hover{background:#1e3a5f}
+
 </style>
 </head>
 <body>
@@ -733,11 +798,13 @@ body.sidebar-collapsed .nav-icon{flex-shrink:0}
     <div class="nav-item" data-v="map" onclick="showView('map')"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>Carte Mondiale<span class="nav-badge" style="background:#064e3b;color:#6ee7b7" id="nb-countries">155</span></div>
     <div class="nav-item" data-v="pipeline" onclick="showView('pipeline')"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Pipeline<span class="nav-badge nb-orange" id="nb-prio">—</span></div>
     <div class="nav-item" data-v="contacts" onclick="showView('contacts')"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>Contacts<span class="nav-badge nb-green" id="nb-contacts">7 880</span></div>
-    <div class="nav-item" id="nav-scraping" data-v="scraping" onclick="showView('scraping')"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07M8.46 8.46a5 5 0 0 0 0 7.07"/></svg>Scraping</div>
+    <div class="nav-item" data-v="interventions" onclick="showView('interventions');setTimeout(function(){switchIntvTab('cal');},50)"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span class="nav-label">Calendrier interventions</span></div>
   </nav>
       <div class="nav-sec" style="margin-top:8px">Ressources</div>
     <div class="nav-item" data-v="technologies" onclick="showView('technologies')"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07M8.46 8.46a5 5 0 0 0 0 7.07"/></svg>Technologies</div>
+    <div class="nav-item" id="nav-scraping" data-v="scraping" onclick="showView('scraping')"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07M8.46 8.46a5 5 0 0 0 0 7.07"/></svg><span class="nav-label">Scraping</span></div>
     <div class="nav-item" id="nav-supabase" data-v="supabase" onclick="showView('supabase')"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>Supabase</div>
+    <div class="nav-item" data-v="techniciens" onclick="showView('techniciens')"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg><span class="nav-label">Techniciens</span><span class="nav-badge" style="background:#1e3a5f;color:#93c5fd;border:1px solid #1d4ed8" id="nb-techniciens">—</span></div>
     <div id="admin-trigger" onclick="openAdminLock()" title="Administration">
       <svg style="width:15px;height:15px;flex-shrink:0;opacity:.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
@@ -1028,6 +1095,103 @@ body.sidebar-collapsed .nav-icon{flex-shrink:0}
 
     <div id="view-technologies" class="view">
       <div id="tech-view-content"></div>
+    </div>
+
+    <!-- VUE TECHNICIENS -->
+    <div id="view-techniciens" class="view">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:16px">
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+          <input id="tech-search" type="text" placeholder="Rechercher un technicien..." style="padding:7px 12px;border-radius:8px;border:1px solid #334155;background:#1e293b;color:#f1f5f9;font-size:12px;width:220px" oninput="renderTechniciens()">
+          <select id="tech-filter-actif" onchange="renderTechniciens()" style="padding:7px 10px;border-radius:8px;border:1px solid #334155;background:#1e293b;color:#94a3b8;font-size:12px">
+            <option value="">Tous (hors archivés)</option><option value="actif">Actifs</option><option value="inactif">Inactifs</option><option value="archive">Archivés</option>
+          </select>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-ghost" style="font-size:11px" onclick="showView('interventions')">&#128197; Calendrier &amp; Interventions</button>
+          <button class="btn btn-primary" style="font-size:11px" onclick="openTechnicienModal(null)">+ Nouveau technicien</button>
+        </div>
+      </div>
+      <div id="tech-grid-container" class="tech-grid"></div>
+    </div>
+
+    <!-- VUE INTERVENTIONS -->
+    <div id="view-interventions" class="view">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:12px">
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+          <select id="intv-filter-tech" onchange="renderInterventions()" style="padding:7px 10px;border-radius:8px;border:1px solid #334155;background:#1e293b;color:#94a3b8;font-size:12px;min-width:160px">
+            <option value="">Tous les techniciens</option>
+          </select>
+          <select id="intv-filter-statut" onchange="renderInterventions()" style="padding:7px 10px;border-radius:8px;border:1px solid #334155;background:#1e293b;color:#94a3b8;font-size:12px">
+            <option value="">Tous statuts</option>
+            <option value="planifiee">Planifiee</option><option value="confirmee">Confirmee</option>
+            <option value="en_cours">En cours</option><option value="terminee">Terminee</option><option value="annulee">Annulee</option>
+          </select>
+          <select id="intv-filter-periode" onchange="renderInterventions()" style="padding:7px 10px;border-radius:8px;border:1px solid #334155;background:#1e293b;color:#94a3b8;font-size:12px">
+            <option value="week">Cette semaine</option><option value="month">Ce mois</option>
+            <option value="year">Cette annee</option><option value="all">Tout</option>
+          </select>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-ghost" style="font-size:11px" onclick="showView('techniciens')">&#8592; Techniciens</button>
+          <button class="btn btn-primary" style="font-size:11px" onclick="openInterventionModal(null)">+ Nouvelle intervention</button>
+        </div>
+      </div>
+      <div id="intv-kpi-taux" class="kpi-taux-grid"></div>
+      <div style="display:flex;gap:0;margin-bottom:0;border-bottom:1px solid #334155">
+        <button id="intv-tab-cal" onclick="switchIntvTab('cal')" style="padding:8px 18px;background:transparent;border:none;border-bottom:2px solid #3b82f6;color:#60a5fa;font-size:12px;font-weight:700;cursor:pointer">&#128197; Calendrier</button>
+        <button id="intv-tab-list" onclick="switchIntvTab('list')" style="padding:8px 18px;background:transparent;border:none;border-bottom:2px solid transparent;color:#64748b;font-size:12px;font-weight:600;cursor:pointer">&#128203; Liste</button>
+      </div>
+      <div id="intv-cal-panel">
+        <div style="display:flex;gap:0;margin:12px 0 4px">
+          <button id="cal-view-btn-week"  onclick="switchCalView('week')"  style="padding:5px 14px;background:rgba(59,130,246,.18);border:1px solid #3b82f6;border-radius:6px 0 0 6px;color:#60a5fa;font-size:11px;font-weight:700;cursor:pointer">Semaine</button>
+          <button id="cal-view-btn-month" onclick="switchCalView('month')" style="padding:5px 14px;background:transparent;border:1px solid #334155;border-left:none;color:#64748b;font-size:11px;font-weight:600;cursor:pointer">Mois</button>
+          <button id="cal-view-btn-year"  onclick="switchCalView('year')"  style="padding:5px 14px;background:transparent;border:1px solid #334155;border-left:none;border-radius:0 6px 6px 0;color:#64748b;font-size:11px;font-weight:600;cursor:pointer">Année</button>
+        </div>
+        <div id="intv-cal-week-wrap" class="cal-wrap">
+          <div class="cal-header">
+            <div class="cal-nav">
+              <button onclick="calNavWeek(-1)">&#8592;</button>
+              <span class="cal-title" id="cal-week-label">--</span>
+              <button onclick="calNavWeek(1)">&#8594;</button>
+              <button style="margin-left:12px;padding:4px 10px;font-size:10px;background:#1e293b;border:1px solid #334155;border-radius:6px;color:#94a3b8;cursor:pointer" onclick="calGoToday()">Aujourd'hui</button>
+            </div>
+          </div>
+          <div id="cal-grid-body" class="cal-grid"></div>
+        </div>
+        <div id="intv-cal-month-wrap" style="display:none">
+          <div class="cal-wrap">
+            <div class="cal-header">
+              <div class="cal-nav">
+                <button onclick="calNavMonth(-1)">&#8592;</button>
+                <span class="cal-title" id="cal-month-label">--</span>
+                <button onclick="calNavMonth(1)">&#8594;</button>
+                <button style="margin-left:12px;padding:4px 10px;font-size:10px;background:#1e293b;border:1px solid #334155;border-radius:6px;color:#94a3b8;cursor:pointer" onclick="calGoToday()">Aujourd'hui</button>
+              </div>
+            </div>
+            <div id="cal-month-body"></div>
+          </div>
+        </div>
+        <div id="intv-cal-year-wrap" style="display:none">
+          <div class="cal-wrap">
+            <div class="cal-header">
+              <div class="cal-nav">
+                <button onclick="calNavYear(-1)">&#8592;</button>
+                <span class="cal-title" id="cal-year-label">--</span>
+                <button onclick="calNavYear(1)">&#8594;</button>
+              </div>
+            </div>
+            <div id="cal-year-body"></div>
+          </div>
+        </div>
+      </div>
+      <div id="intv-list-panel" style="display:none;margin-top:12px">
+        <div class="intv-table-wrap">
+          <table class="intv-table">
+            <thead><tr><th>Date</th><th>Duree</th><th>Technicien</th><th>Entreprise</th><th>Type</th><th>Titre</th><th>Statut</th><th>Pipeline</th><th></th></tr></thead>
+            <tbody id="intv-list-body"></tbody>
+          </table>
+        </div>
+      </div>
     </div>
 
   </div>
@@ -1422,7 +1586,9 @@ const VIEWS = {
   contacts:'Contacts',
   scraping:'Scraping',
   technologies:'Technologies',
-  supabase:'Supabase'
+  supabase:'Supabase',
+  techniciens:'Techniciens',
+  interventions:'Interventions'
 };
 
 function showView(v){
@@ -1452,6 +1618,8 @@ function showView(v){
     if(!sessionStorage.getItem('user_email')){ showView('dashboard'); return; }
     renderSbDashboard();
   }
+  else if(v==='techniciens') renderTechniciens();
+  else if(v==='interventions') renderInterventions();
 }
 
 // ─── MAP EVENTS ──────────────────────────────────────────────────────────────
@@ -1638,7 +1806,7 @@ function renderDashboard(){
   };
 
   const top20=prio.filter(c=>c.confidence==='High').slice(0,20);
-  document.getElementById('top-tbl-body').innerHTML=top20.map(c=>`<tr onclick="openModal(${c.id})"><td style="font-weight:600;color:#f1f5f9">${esc(c.name)}</td><td style="color:#94a3b8">${esc(c.country||'')}</td><td>${techBadge(c.technology)}</td><td>${plPill(normPipeline(c))}</td><td>${prioHtml(c.priority||'medium')}</td></tr>`).join('');
+  document.getElementById('top-tbl-body').innerHTML=top20.map(c=>`<tr onclick="openModal(${c.id})"><td style="font-weight:600;color:#f1f5f9">${esc(c.name)}</td><td style="color:#94a3b8">${esc(c.country||'')}</td><td>${techBadge(c.technology)}</td><td>${plPill(c.pipeline||'new')}</td><td>${prioHtml(c.priority||'medium')}</td></tr>`).join('');
 }
 
 // ─── COMPANIES ───────────────────────────────────────────────────────────────
@@ -1683,7 +1851,7 @@ function renderCompanies(){
   const start=(STATE.page-1)*STATE.perPage,page=data.slice(start,start+STATE.perPage);
   document.getElementById('companies-tbody').innerHTML=page.length===0
     ?`<tr><td colspan="9"><div class="empty-state"><p>Aucune entreprise trouvée</p></div></td></tr>`
-    :page.map(c=>`<tr class="${c.is_priority?'is-priority':''}" onclick="openModal(${c.id})"><td title="${esc(c.name)}" style="font-weight:600;color:${c.is_priority?'#fbbf24':'#e2e8f0'}">${c.is_priority?'⭐ ':''}<span>${esc(c.name)}</span></td><td style="color:#94a3b8">${esc(c.country||'')}</td><td style="color:#64748b">${esc(c.city||'')}</td><td>${techBadge(c.technology)}</td><td>${plPill(normPipeline(c))}</td><td>${prioHtml(c.priority||'medium')}</td><td><span class="badge ${'b-'+(c.confidence||'').toLowerCase()}">${esc(c.confidence||'-')}</span></td><td style="text-align:center;color:${c.contact_count>0?'#4ade80':'#475569'}">${c.contact_count||'-'}</td><td onclick="event.stopPropagation()"><button class="btn btn-ghost btn-sm" onclick="openModal(${c.id})">Voir</button></td></tr>`).join('');
+    :page.map(c=>`<tr class="${c.is_priority?'is-priority':''}" onclick="openModal(${c.id})"><td title="${esc(c.name)}" style="font-weight:600;color:${c.is_priority?'#fbbf24':'#e2e8f0'}">${c.is_priority?'⭐ ':''}<span>${esc(c.name)}</span></td><td style="color:#94a3b8">${esc(c.country||'')}</td><td style="color:#64748b">${esc(c.city||'')}</td><td>${techBadge(c.technology)}</td><td>${plPill(c.pipeline||'new')}</td><td>${prioHtml(c.priority||'medium')}</td><td><span class="badge ${'b-'+(c.confidence||'').toLowerCase()}">${esc(c.confidence||'-')}</span></td><td style="text-align:center;color:${c.contact_count>0?'#4ade80':'#475569'}">${c.contact_count||'-'}</td><td onclick="event.stopPropagation()"><button class="btn btn-ghost btn-sm" onclick="openModal(${c.id})">Voir</button></td></tr>`).join('');
   renderPagination(total);
   document.getElementById('toggle-prio').className='toggle-btn'+(STATE.showPriorityOnly?' on':'');
   document.getElementById('toggle-all').className='toggle-btn'+(!STATE.showPriorityOnly?' on':'');
@@ -1968,7 +2136,7 @@ async function setPipeline(id, val){
   if(!canEdit()){ alert('Accès refusé'); return; }
   console.log('[setPipeline] clicked — id:', id, 'val:', val);
   try {
-    const payload = { pipeline_code: val };
+    const payload = { pipeline: val, pipeline_code: val };
     console.log('[setPipeline] payload:', JSON.stringify(payload));
     await sbUpdate('entreprises', id, payload);
     const c = await sbFetchCompany(id);
@@ -1978,8 +2146,9 @@ async function setPipeline(id, val){
       '| expected:', val,
       '| pipeline:', c.pipeline,
       '| pipeline_code:', c.pipeline_code);
-    // Sync mémoire — remplacement complet (pas Object.assign) pour éviter stale fields
-    updateCompanyInMemory(c);
+    // Sync mémoire
+    const idx = CRM_DATA.companies.findIndex(x => x.id === id);
+    if(idx >= 0) Object.assign(CRM_DATA.companies[idx], c);
     // Re-render from confirmed DB state regardless
     const activePipeline = c.pipeline_code || c.pipeline || 'new';
     const sr = document.getElementById('sr-' + id);
@@ -1988,10 +2157,8 @@ async function setPipeline(id, val){
         `<button class="status-btn${activePipeline === s ? ' sel' : ''}" onclick="setPipeline(${id},'${s}')">${PL_LABEL[s]}</button>`
       ).join('');
     }
-    console.log('PIPELINE UPDATED:', c.id, c.pipeline_code);
     if(verified){
       toast('Pipeline → ' + (PL_LABEL[val] || val));
-      renderDashboard();
       if(STATE.view === 'pipeline') renderPipeline();
     } else {
       toast('⚠ Pipeline non sauvegardé — vérifiez les droits RLS Supabase');
@@ -2617,12 +2784,6 @@ async function addContact(companyId){
 }
 
 // ─── PIPELINE ─────────────────────────────────────────────────────────────────
-function updateCompanyInMemory(updated) {
-  const idx = CRM_DATA.companies.findIndex(c => c.id === updated.id);
-  if (idx !== -1) {
-    CRM_DATA.companies[idx] = updated;
-  }
-}
 function normPipeline(c){ return PIPELINE_STAGES.includes(c.pipeline_code) ? c.pipeline_code : (PIPELINE_STAGES.includes(c.pipeline) ? c.pipeline : 'new'); }
 function renderPipeline(){
   const prio = CRM_DATA.companies.filter(c => c.is_priority);
@@ -3487,7 +3648,7 @@ function renderDrill(companies){
   const bgmap={flexo:'rgba(20,83,45,.4)',roto:'rgba(120,53,15,.4)',both:'rgba(30,58,138,.4)',pkg:'rgba(88,28,135,.3)',other:'#1e293b'};
   const emap={flexo:'🖨',roto:'🌀',both:'🔄',pkg:'📦',other:'🏭'};
   document.getElementById('drill-list').innerHTML=list.length===0?`<div class="drill-empty">Aucune entreprise</div>`
-    :list.map(c=>{const tc=techClass(c.technology);return `<div class="drill-item" onclick="openModal(${c.id})"><div class="di-icon" style="background:${bgmap[tc]}">${emap[tc]}</div><div style="flex:1;min-width:0"><div class="di-name">${c.is_priority?'<span style="color:#fbbf24">★</span> ':''}<span style="color:${c.is_priority?'#fbbf24':'#e2e8f0'}">${esc(c.name)}</span></div><div class="di-meta">${esc(c.city||'')}${c.city?' · ':''}${esc((c.technology||'').split(' ')[0])}</div></div><div>${plPill(normPipeline(c))}</div></div>`;}).join('');
+    :list.map(c=>{const tc=techClass(c.technology);return `<div class="drill-item" onclick="openModal(${c.id})"><div class="di-icon" style="background:${bgmap[tc]}">${emap[tc]}</div><div style="flex:1;min-width:0"><div class="di-name">${c.is_priority?'<span style="color:#fbbf24">★</span> ':''}<span style="color:${c.is_priority?'#fbbf24':'#e2e8f0'}">${esc(c.name)}</span></div><div class="di-meta">${esc(c.city||'')}${c.city?' · ':''}${esc((c.technology||'').split(' ')[0])}</div></div><div>${plPill(c.pipeline||'new')}</div></div>`;}).join('');
 }
 function searchDrill(q){MAP.drillQ=q;if(!MAP.sel)return;const cidx=countryIdx(STATE.mapMode);if(cidx[MAP.sel])renderDrill(cidx[MAP.sel]);}
 function exportDrill(name,companies){
@@ -3760,6 +3921,22 @@ async function loadReferenceData() {
     console.warn('[ref] Erreur chargement ref_contact_roles:', e.message);
   }
 
+  // ref_type_intervention
+  try {
+    const rti = await sbSelect('ref_type_intervention', 'select=code,label,couleur&order=label');
+    if (Array.isArray(rti) && rti.length > 0) REF_DATA.type_intervention = rti;
+  } catch(e) { console.warn('[REF] ref_type_intervention:', e.message); }
+
+  // techniciens (liste complète pour dropdowns)
+  try {
+    const techs = await sbSelect('techniciens', 'select=id,nom,prenom,specialite,zone_geographique,actif,statut,photo_url&order=nom');
+    if (Array.isArray(techs) && techs.length > 0) {
+      REF_DATA.techniciens = techs;
+      const nb = document.getElementById('nb-techniciens');
+      if (nb) nb.textContent = techs.filter(t=>t.actif).length;
+    }
+  } catch(e) { console.warn('[REF] techniciens:', e.message); }
+
   console.log('[REF] Référentiels chargés —',
     Object.entries(REF_DATA).map(function(e){ return e[0]+':'+e[1].length; }).join(' | '));
 }
@@ -3808,7 +3985,7 @@ async function sbInsert(table, row){
     method: 'POST',
     headers: {
       'apikey':        cfg.key,
-      'Authorization': 'Bearer ' + getAuthBearer(cfg),
+      'Authorization': 'Bearer ' + cfg.key,
       'Content-Type':  'application/json',
       'Prefer':        'return=minimal'
     },
@@ -3830,10 +4007,12 @@ async function sbSelect(table, params){
   const cfg = getSupabaseCfg();
   if(!cfg.url || !cfg.key) return null;
   const qs = params ? '?' + params : '?select=*';
+  // Utilise le JWT de session si disponible, sinon anon key
+  const token = sessionStorage.getItem('sb_access_token') || cfg.key;
   const resp = await fetch(cfg.url + '/rest/v1/' + table + qs, {
     headers:{
       'apikey':        cfg.key,
-      'Authorization': 'Bearer ' + getAuthBearer(cfg),
+      'Authorization': 'Bearer ' + token,
       'Content-Type':  'application/json'
     }
   });
@@ -3850,7 +4029,7 @@ async function sbDelete(table, id){
     method: 'DELETE',
     headers:{
       'apikey':        cfg.key,
-      'Authorization': 'Bearer ' + getAuthBearer(cfg),
+      'Authorization': 'Bearer ' + cfg.key,
       'Content-Type':  'application/json',
       'Prefer':        'return=representation'
     }
@@ -3889,7 +4068,7 @@ async function sbUpdate(table, id, row){
     method: 'PATCH',
     headers:{
       'apikey':        cfg.key,
-      'Authorization': 'Bearer ' + getAuthBearer(cfg),
+      'Authorization': 'Bearer ' + cfg.key,
       'Content-Type':  'application/json',
       'Prefer':        'return=minimal'
     },
@@ -4422,11 +4601,6 @@ function getSupabaseCfg(){
   if(url && key) return { url, key };
   return {};
 }
-// Returns the JWT session token for authenticated requests.
-// Falls back to anon key only if no session exists (public reads).
-function getAuthBearer(cfg){
-  return sessionStorage.getItem('sb_access_token') || cfg.key;
-}
 
 function openSupabaseConfig(){
   if(getCurrentRole() !== 'admin'){ alert('Accès refusé'); return; }
@@ -4519,7 +4693,7 @@ async function fetchSupabaseContacts(){
     var resp  = await fetch(url, {
       headers:{
         'apikey': cfg.key,
-        'Authorization': 'Bearer ' + getAuthBearer(cfg),
+        'Authorization': 'Bearer ' + cfg.key,
         'Content-Type': 'application/json',
         'Prefer': 'return=representation'
       }
@@ -4674,6 +4848,1149 @@ document.getElementById("current-user").textContent =
   // Apply role-based UI (enable OR disable — never one-way only)
   applyRoleUI();
 })();
+
+// ═══════════════════════════════════════════════════════════════════════════
+// MODULE TECHNICIENS / INTERVENTIONS
+// ═══════════════════════════════════════════════════════════════════════════
+
+// ── Etat module ─────────────────────────────────────────────────────────────
+const TECH_STATE = {
+  techniciens: [],
+  interventions: [],
+  calWeekOffset: 0,
+  calMonthOffset: 0,
+  calYearOffset: 0,
+  intvTab: 'cal',
+  calView: 'week'
+};
+
+const INTV_STATUS_LABEL = {
+  planifiee:'Planifiee', confirmee:'Confirmee',
+  en_cours:'En cours', terminee:'Terminee', annulee:'Annulee'
+};
+const INTV_DUREE_LABEL = {matin:'Matin', apres_midi:'Apres-midi', journee:'Journee'};
+const INTV_DUREE_VAL   = {matin:0.5, apres_midi:0.5, journee:1};
+
+// ── Helpers ─────────────────────────────────────────────────────────────────
+function getTechName(t){ return t ? esc(t.prenom+' '+t.nom) : '—'; }
+function getTechById(id){ return TECH_STATE.techniciens.find(t=>t.id===id)||null; }
+
+function getTypeIntervention(code){
+  if(!REF_DATA.type_intervention) return {label:code||'—',couleur:'#6B7280'};
+  return REF_DATA.type_intervention.find(t=>t.code===code)||{label:code||'—',couleur:'#6B7280'};
+}
+
+function techAvatarHtml(tech, size){
+  size = size||40;
+  if(tech && tech.photo_url){
+    return '<img src="'+esc(tech.photo_url)+'" style="width:'+size+'px;height:'+size+'px;border-radius:50%;object-fit:cover;border:2px solid #475569" onerror="this.style.display=&quot;none&quot;">';
+  }
+  var initials = tech ? ((tech.prenom||'?')[0]+(tech.nom||'?')[0]).toUpperCase() : '?';
+  return '<div style="width:'+size+'px;height:'+size+'px;border-radius:50%;background:linear-gradient(135deg,#3b82f6,#6366f1);display:flex;align-items:center;justify-content:center;font-size:'+(size/3)+'px;font-weight:700;color:#fff;flex-shrink:0">'+initials+'</div>';
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// TECHNICIENS — liste
+// ─────────────────────────────────────────────────────────────────────────────
+async function renderTechniciens(){
+  const container = document.getElementById('tech-grid-container');
+  if(!container) return;
+  container.innerHTML = '<div style="color:#64748b;font-size:12px;padding:20px">Chargement...</div>';
+
+  try {
+    const data = await sbSelect('techniciens','select=*&order=nom');
+    TECH_STATE.techniciens = Array.isArray(data) ? data : [];
+  } catch(e){
+    container.innerHTML = '<div style="color:#ef4444;font-size:12px;padding:20px">Erreur chargement: '+esc(e.message)+'</div>';
+    return;
+  }
+
+  const q   = (document.getElementById('tech-search')||{}).value||'';
+  const act = (document.getElementById('tech-filter-actif')||{}).value||'';
+  let list  = TECH_STATE.techniciens;
+  if(q) list = list.filter(t=>(t.nom+' '+t.prenom+' '+(t.specialite||'')+(t.zone_geographique||'')).toLowerCase().includes(q.toLowerCase()));
+  const getTStatut = function(t){ return t.statut||(t.actif?'actif':'inactif'); };
+  if(act==='') { list = list.filter(t=> getTStatut(t)!=='archive'); }
+  else { list = list.filter(t=> getTStatut(t)===act); }
+
+  // Badge sidebar
+  const nb = document.getElementById('nb-techniciens');
+  if(nb) nb.textContent = TECH_STATE.techniciens.filter(t=> getTStatut(t)==='actif').length;
+
+  if(!list.length){
+    container.innerHTML = '<div style="color:#64748b;font-size:12px;padding:20px">Aucun technicien.</div>';
+    return;
+  }
+
+  // Compter interventions par technicien (a venir / en cours)
+  let intvsMap = {};
+  try {
+    const intv = await sbSelect('interventions','select=technicien_id,statut&statut=neq.annulee&statut=neq.terminee');
+    if(Array.isArray(intv)) intv.forEach(i=>{ intvsMap[i.technicien_id]=(intvsMap[i.technicien_id]||0)+1; });
+  } catch(_){}
+
+  container.innerHTML = list.map(t=>{
+    const cnt = intvsMap[t.id]||0;
+    const statut = t.statut||(t.actif?'actif':'inactif');
+    const statutLabel = statut==='actif'?'Actif':statut==='archive'?'Archivé':'Inactif';
+    const statutCls   = statut==='actif'?'tech-badge-actif':'tech-badge-inactif';
+    return '<div class="tech-card">'
+      +'<div class="tech-card-header">'
+      +techAvatarHtml(t,48)
+      +'<div><div class="tech-name">'+esc(t.prenom)+' '+esc(t.nom)+'</div>'
+      +'<div class="tech-specialite">'+(t.specialite?esc(t.specialite):'—')+'</div></div>'
+      +'</div>'
+      +'<div class="tech-meta">'
+      +'<span class="tech-badge '+statutCls+'">'+statutLabel+'</span>'
+      +(t.zone_geographique?'<span class="tech-badge tech-badge-zone">'+esc(t.zone_geographique)+'</span>':'')
+      +'</div>'
+      +(t.email?'<div style="font-size:10px;color:#64748b">'+esc(t.email)+'</div>':'')
+      +(t.telephone?'<div style="font-size:10px;color:#64748b">'+esc(t.telephone)+'</div>':'')
+      +'<div class="tech-interventions-count">'+cnt+' intervention'+(cnt>1?'s':'')+' active'+(cnt>1?'s':'')+'</div>'
+      +'<div style="display:flex;gap:4px;margin-top:8px;justify-content:flex-end">'
+      +'<button onclick="event.stopPropagation();openTechnicienModal(\''+t.id+'\')" style="background:rgba(37,99,235,.15);border:1px solid rgba(37,99,235,.35);color:#60a5fa;border-radius:5px;padding:3px 9px;font-size:10px;font-weight:600;cursor:pointer" title="Modifier">✏ Modifier</button>'
+      +'<button onclick="event.stopPropagation();technicienLifecycle(\''+t.id+'\')" style="background:rgba(100,116,139,.15);border:1px solid rgba(100,116,139,.35);color:#94a3b8;border-radius:5px;padding:3px 9px;font-size:10px;font-weight:600;cursor:pointer" title="Statut">⬇ Statut</button>'
+      +'</div>'
+      +'</div>';
+  }).join('');
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// TECHNICIEN — modal fiche (creation / edition)
+// ─────────────────────────────────────────────────────────────────────────────
+async function openTechnicienModal(id){
+  let tech = null;
+  if(id){
+    try { const r = await sbSelect('techniciens','select=*&id=eq.'+id); tech = Array.isArray(r)&&r.length?r[0]:null; } catch(_){}
+  }
+  const editable = canEdit();
+  const v = function(f){ return tech ? esc(tech[f]||'') : ''; };
+  const techStatut = tech ? (tech.statut||(tech.actif?'actif':'inactif')) : 'actif';
+  const statutLabel = techStatut==='actif'?'Actif':techStatut==='archive'?'Archivé':'Inactif';
+
+  let html = '<div style="padding:4px 0 0 0">'
+    +'<h2 style="font-size:15px;font-weight:700;color:#f1f5f9;margin-bottom:16px">'+(id?'Fiche technicien':'Nouveau technicien')+'</h2>'
+    +'<div class="form-avatar-zone">'
+    +'<div class="form-avatar-preview" id="modal-avatar-preview">'
+    +(tech&&tech.photo_url?'<img id="modal-avatar-img" src="'+esc(tech.photo_url)+'" style="width:72px;height:72px;object-fit:cover;border-radius:50%">':'<span id="modal-avatar-img" style="font-size:28px">👤</span>')
+    +'</div>'
+    +(editable?'<div><label class="upload-btn" for="modal-avatar-input">📷 Choisir une photo</label>'
+      +'<input type="file" id="modal-avatar-input" accept="image/jpeg,image/png,image/webp" style="display:none" onchange="previewAvatar(this)">'
+      +'<div style="font-size:10px;color:#64748b;margin-top:4px">JPG/PNG/WEBP · max 2 Mo</div></div>':'')
+    +'</div>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">'
+    +fld('Prénom *','tech-prenom','text',v('prenom'),editable)
+    +fld('Nom *','tech-nom','text',v('nom'),editable)
+    +fld('Email','tech-email','email',v('email'),editable)
+    +fld('Téléphone','tech-telephone','text',v('telephone'),editable)
+    +fld('Spécialité','tech-specialite','text',v('specialite'),editable)
+    +fld('Zone géographique','tech-zone','text',v('zone_geographique'),editable)
+    +'</div>'
+    +'<div style="margin-top:10px">'
+    +'<label style="font-size:10px;color:#64748b;font-weight:600;text-transform:uppercase;letter-spacing:.6px">Notes</label>'
+    +'<textarea id="tech-notes" style="width:100%;margin-top:4px;padding:8px;background:#0f172a;border:1px solid #334155;border-radius:8px;color:#e2e8f0;font-size:12px;resize:vertical;min-height:70px;box-sizing:border-box"'+(editable?'':' readonly')+'>'+v('notes')+'</textarea>'
+    +'</div>'
+    +'<div style="margin-top:10px">'
+    +'<label style="font-size:10px;color:#64748b;font-weight:600;text-transform:uppercase;letter-spacing:.6px">Statut</label>'
+    +(editable
+      ?'<select id="tech-statut" style="width:100%;margin-top:4px;padding:8px;background:#0f172a;border:1px solid #334155;border-radius:8px;color:#e2e8f0;font-size:12px">'
+        +'<option value="actif"'+(techStatut==='actif'?' selected':'')+'>Actif</option>'
+        +'<option value="inactif"'+(techStatut==='inactif'?' selected':'')+'>Inactif</option>'
+        +'<option value="archive"'+(techStatut==='archive'?' selected':'')+'>Archivé</option>'
+        +'</select>'
+      :'<div style="margin-top:4px;padding:8px;background:#0f172a;border:1px solid #334155;border-radius:8px;color:#e2e8f0;font-size:12px">'+statutLabel+'</div>'
+    )
+    +'</div>';
+
+  if(editable){
+    html += '<div style="display:flex;gap:8px;margin-top:18px;justify-content:flex-end">';
+    if(id) html += '<button class="btn btn-ghost" style="font-size:11px" onclick="openIntvForTech(\''+id+'\')">Voir interventions</button>';
+    html += '<button class="btn btn-ghost" style="font-size:11px" onclick="closeModal()">Annuler</button>';
+    html += '<button class="btn btn-primary" style="font-size:11px" onclick="saveTechnicien('+(id?'\''+id+'\'':'null')+')">'+(id?'Enregistrer':'Créer')+'</button>';
+    html += '</div>';
+  } else {
+    html += '<div style="display:flex;gap:8px;margin-top:18px;justify-content:flex-end">';
+    if(id) html += '<button class="btn btn-ghost" style="font-size:11px" onclick="openIntvForTech(\''+id+'\')">Voir interventions</button>';
+    html += '<button class="btn btn-ghost" style="font-size:11px" onclick="closeModal()">Fermer</button>';
+    html += '</div>';
+  }
+  html += '</div>';
+  document.getElementById('modal-content').innerHTML = html;
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function fld(label, id, type, val, editable){
+  return '<div><label style="font-size:10px;color:#64748b;font-weight:600;text-transform:uppercase;letter-spacing:.6px">'+label+'</label>'
+    +'<input id="'+id+'" type="'+type+'" value="'+val+'" '+(editable?'':'readonly')+' style="width:100%;margin-top:4px;padding:8px;background:#0f172a;border:1px solid #334155;border-radius:8px;color:#e2e8f0;font-size:12px;box-sizing:border-box"></div>';
+}
+
+function previewAvatar(input){
+  const file = input.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e){
+    const prev = document.getElementById('modal-avatar-img');
+    if(prev.tagName==='IMG') prev.src = e.target.result;
+    else { prev.outerHTML = '<img id="modal-avatar-img" src="'+e.target.result+'" style="width:72px;height:72px;object-fit:cover;border-radius:50%">'; }
+  };
+  reader.readAsDataURL(file);
+}
+
+async function uploadAvatar(file, techId){
+  const cfg = getSupabaseCfg();
+  const token = _getSessionToken();
+  const ext = file.name.split('.').pop().toLowerCase();
+  const path = techId+'/avatar.'+ext;
+  const resp = await fetch(cfg.url+'/storage/v1/object/techniciens-avatars/'+path, {
+    method:'POST',
+    headers:{ 'apikey':cfg.key, 'Authorization':'Bearer '+token, 'Content-Type':file.type, 'x-upsert':'true' },
+    body: file
+  });
+  if(!resp.ok) throw new Error('Upload avatar HTTP '+resp.status);
+  return cfg.url+'/storage/v1/object/public/techniciens-avatars/'+path;
+}
+
+async function saveTechnicien(id){
+  const prenom = (document.getElementById('tech-prenom').value||'').trim();
+  const nom    = (document.getElementById('tech-nom').value||'').trim();
+  if(!prenom||!nom){ toast('Prénom et nom obligatoires'); return; }
+
+  const statutVal = (document.getElementById('tech-statut')||{value:'actif'}).value||'actif';
+  const payload = {
+    prenom, nom,
+    email:      (document.getElementById('tech-email').value||'').trim()||null,
+    telephone:  (document.getElementById('tech-telephone').value||'').trim()||null,
+    specialite: (document.getElementById('tech-specialite').value||'').trim()||null,
+    zone_geographique: (document.getElementById('tech-zone').value||'').trim()||null,
+    notes:      (document.getElementById('tech-notes').value||'').trim()||null,
+    actif:      statutVal==='actif',
+    statut:     statutVal,
+    updated_at: new Date().toISOString()
+  };
+
+  async function sbSaveWithFallback(isInsert, techId){
+    try {
+      if(isInsert) await _sbInsertUuid('techniciens', payload);
+      else await _sbRestUuid('PATCH', 'techniciens', techId, payload);
+    } catch(e){
+      if(e.message && e.message.includes('statut')){
+        const p2 = Object.assign({}, payload); delete p2.statut;
+        toast('⚠ Migration SQL requise pour "statut". Exécutez la migration dans Supabase.');
+        if(isInsert) await _sbInsertUuid('techniciens', p2);
+        else await _sbRestUuid('PATCH', 'techniciens', techId, p2);
+      } else { throw e; }
+    }
+  }
+
+  try {
+    await sbSaveWithFallback(!id || id==='null', id);
+    const fileInput = document.getElementById('modal-avatar-input');
+    if(fileInput && fileInput.files && fileInput.files[0]){
+      try {
+        let targetId = id;
+        if(!targetId){
+          const rows = await sbSelect('techniciens',
+            'select=id&prenom=eq.'+encodeURIComponent(payload.prenom)+'&nom=eq.'+encodeURIComponent(payload.nom)+'&order=created_at.desc&limit=1');
+          targetId = (Array.isArray(rows) && rows.length) ? rows[0].id : null;
+        }
+        if(targetId){
+          const url = await uploadAvatar(fileInput.files[0], targetId);
+          await _sbRestUuid('PATCH', 'techniciens', targetId, {photo_url: url, updated_at: new Date().toISOString()});
+        }
+      } catch(e){ toast('Avatar non sauvegardé : '+e.message); }
+    }
+    toast(id ? 'Technicien mis à jour' : 'Technicien créé');
+    closeModal();
+    const refreshed = await sbSelect('techniciens','select=id,nom,prenom,specialite,zone_geographique,actif,statut,photo_url&order=nom');
+    if(Array.isArray(refreshed)) REF_DATA.techniciens = refreshed;
+    populateIntvTechDropdown();
+    renderTechniciens();
+  } catch(e){ toast('Erreur : '+e.message); }
+}
+
+async function deleteTechnicien(id){
+  if(!canDelete()){ toast('Accès refusé — admin uniquement'); return; }
+  if(!confirm('⚠ SUPPRESSION DÉFINITIVE — irréversible.\nConfirmer ?')) return;
+  try {
+    await _sbRestUuid('DELETE', 'techniciens', id, null);
+    toast('Technicien supprimé définitivement');
+    closeModal();
+    const refreshed = await sbSelect('techniciens','select=id,nom,prenom,specialite,zone_geographique,actif,statut,photo_url&order=nom');
+    if(Array.isArray(refreshed)) REF_DATA.techniciens = refreshed;
+    populateIntvTechDropdown();
+    renderTechniciens();
+  } catch(e){ toast('Erreur : '+e.message); }
+}
+
+function technicienLifecycle(id){
+  if(!canEdit()){ toast('Accès refusé'); return; }
+  const tech = TECH_STATE.techniciens.find(function(t){ return String(t.id)===String(id); });
+  const nom = tech ? esc(tech.prenom)+' '+esc(tech.nom) : '';
+  const statut = tech ? (tech.statut||(tech.actif?'actif':'inactif')) : 'actif';
+  let html = '<div style="padding:4px 0">'
+    +'<h2 style="font-size:15px;font-weight:700;color:#f1f5f9;margin-bottom:4px">Changer le statut</h2>'
+    +'<p style="font-size:12px;color:#64748b;margin-bottom:16px">'+nom+'</p>'
+    +'<div style="display:flex;flex-direction:column;gap:8px">';
+  if(statut!=='actif')
+    html += '<button class="btn btn-primary" style="font-size:12px;text-align:left;justify-content:flex-start" onclick="setTechStatut(\''+id+'\',\'actif\')">✅ Remettre actif</button>';
+  if(statut!=='inactif')
+    html += '<button class="btn btn-ghost" style="font-size:12px;text-align:left;justify-content:flex-start" onclick="setTechStatut(\''+id+'\',\'inactif\')">🔕 Passer en inactif</button>';
+  if(statut!=='archive')
+    html += '<button class="btn btn-ghost" style="font-size:12px;text-align:left;justify-content:flex-start" onclick="setTechStatut(\''+id+'\',\'archive\')">📦 Archiver</button>';
+  if(canDelete()){
+    html += '<div style="border-top:1px solid #334155;margin-top:4px;padding-top:8px">'
+      +'<button class="btn" style="background:rgba(239,68,68,.15);color:#fca5a5;border:1px solid rgba(239,68,68,.3);font-size:11px;width:100%;text-align:left;justify-content:flex-start" onclick="deleteTechnicien(\''+id+'\')">⚠ Supprimer définitivement (admin)</button>'
+      +'</div>';
+  }
+  html += '</div><div style="margin-top:12px;text-align:right">'
+    +'<button class="btn btn-ghost" style="font-size:11px" onclick="closeModal()">Annuler</button>'
+    +'</div></div>';
+  document.getElementById('modal-content').innerHTML = html;
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+async function setTechStatut(id, statut){
+  const payload = {actif: statut==='actif', updated_at: new Date().toISOString()};
+  try {
+    try {
+      await _sbRestUuid('PATCH','techniciens',id,Object.assign({statut:statut},payload));
+    } catch(e){
+      if(e.message && e.message.includes('statut')){
+        toast('⚠ Migration SQL requise pour "statut".');
+        await _sbRestUuid('PATCH','techniciens',id,payload);
+      } else { throw e; }
+    }
+    const labels={actif:'Technicien remis actif',inactif:'Technicien passé inactif',archive:'Technicien archivé'};
+    toast(labels[statut]||'Statut mis à jour');
+    closeModal();
+    const refreshed = await sbSelect('techniciens','select=id,nom,prenom,specialite,zone_geographique,actif,statut,photo_url&order=nom');
+    if(Array.isArray(refreshed)) REF_DATA.techniciens = refreshed;
+    populateIntvTechDropdown();
+    renderTechniciens();
+  } catch(e){ toast('Erreur : '+e.message); }
+}
+
+function openIntvForTech(techId){
+  closeModal();
+  // Presélectionne le filtre tech
+  showView('interventions');
+  setTimeout(function(){
+    const sel = document.getElementById('intv-filter-tech');
+    if(sel) { sel.value = techId; renderInterventions(); }
+  }, 200);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// INTERVENTIONS — chargement + render
+// ─────────────────────────────────────────────────────────────────────────────
+async function renderInterventions(){
+  // Toujours repeupler le dropdown techniciens (actifs uniquement)
+  populateIntvTechDropdown();
+
+  // Construire les params Supabase
+  const techId  = (document.getElementById('intv-filter-tech')||{}).value||'';
+  const statut  = (document.getElementById('intv-filter-statut')||{}).value||'';
+  const periode = (document.getElementById('intv-filter-periode')||{}).value||'week';
+
+  let params = 'select=*&order=date_debut.asc';
+  if(techId)  params += '&technicien_id=eq.'+techId;
+  if(statut)  params += '&statut=eq.'+statut;
+
+  const now = new Date();
+  if(periode==='week'){
+    const monday = new Date(now); monday.setDate(now.getDate()-((now.getDay()+6)%7));
+    const sunday = new Date(monday); sunday.setDate(monday.getDate()+6);
+    // Toutes les interventions qui se chevauchent avec la semaine
+    params += '&date_debut=lte.'+sunday.toISOString().slice(0,10)+'&date_fin=gte.'+monday.toISOString().slice(0,10);
+  } else if(periode==='month'){
+    const y=now.getFullYear(), m=String(now.getMonth()+1).padStart(2,'0');
+    const last = new Date(y, now.getMonth()+1, 0).getDate();
+    const mEnd = y+'-'+m+'-'+String(last).padStart(2,'0');
+    const mStart = y+'-'+m+'-01';
+    params += '&date_debut=lte.'+mEnd+'&date_fin=gte.'+mStart;
+  } else if(periode==='year'){
+    params += '&date_debut=lte.'+now.getFullYear()+'-12-31&date_fin=gte.'+now.getFullYear()+'-01-01';
+  }
+
+  try {
+    const data = await sbSelect('interventions', params);
+    TECH_STATE.interventions = Array.isArray(data) ? data : [];
+  } catch(e){
+    toast('Erreur chargement interventions : '+e.message);
+    TECH_STATE.interventions = [];
+  }
+
+  renderIntvKpiTaux();
+  if(TECH_STATE.intvTab==='cal') renderCurrentCalView();
+  else renderIntvList();
+}
+
+// ─── KPI taux utilisation ────────────────────────────────────────────────────
+function renderIntvKpiTaux(){
+  const container = document.getElementById('intv-kpi-taux');
+  if(!container) return;
+  const periode = (document.getElementById('intv-filter-periode')||{}).value||'week';
+
+  // Jours ouvrés dans la période
+  const now = new Date();
+  let joursRef = 5; // semaine
+  if(periode==='month') joursRef = 22;
+  else if(periode==='year') joursRef = 260;
+  else if(periode==='all') joursRef = 260;
+
+  // Calculer journées par technicien (date_fin - date_debut + 1, hors annulée)
+  const map = {};
+  TECH_STATE.interventions.forEach(function(i){
+    if(i.statut==='annulee') return;
+    const key = i.technicien_id;
+    const debut = i.date_debut || i.date_intervention;
+    const fin   = i.date_fin   || i.date_intervention || debut;
+    if(!debut) return;
+    const d1 = new Date(debut), d2 = new Date(fin);
+    const jours = Math.max(1, Math.round((d2-d1)/(1000*60*60*24))+1);
+    map[key] = (map[key]||0) + jours;
+  });
+
+  const techs = REF_DATA.techniciens || TECH_STATE.techniciens;
+  if(!techs || !techs.length){
+    container.innerHTML = '';
+    return;
+  }
+
+  container.innerHTML = techs.filter(t=>(t.statut ? t.statut==='actif' : t.actif)).map(function(t){
+    const jours = map[t.id]||0;
+    const pct   = Math.min(100, Math.round(jours/joursRef*100));
+    const warn  = pct>=85 ? ' warn' : '';
+    return '<div class="kpi-taux-card">'
+      +'<div class="kpi-taux-name">'+techAvatarHtml(t,24)+' <span style="vertical-align:middle">'+esc(t.prenom)+' '+esc(t.nom)+'</span></div>'
+      +'<div class="kpi-taux-pct" style="color:'+(pct>=85?'#fcd34d':'#60a5fa')+'">'+pct+'%</div>'
+      +'<div class="cal-taux-bar"><div class="cal-taux-fill'+warn+'" style="width:'+pct+'%"></div></div>'
+      +'<div class="kpi-taux-label">'+jours+'j / '+joursRef+'j ouvrés</div>'
+      +'</div>';
+  }).join('');
+}
+
+// ─── Vue liste ───────────────────────────────────────────────────────────────
+function renderIntvList(){
+  const tbody = document.getElementById('intv-list-body');
+  if(!tbody) return;
+  if(!TECH_STATE.interventions.length){
+    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;color:#475569;padding:20px">Aucune intervention</td></tr>';
+    return;
+  }
+  tbody.innerHTML = TECH_STATE.interventions.map(function(i){
+    const tech = getTechById(i.technicien_id);
+    const type = getTypeIntervention(i.type_intervention);
+    const statusCls = 'intv-s-'+(i.statut||'planifiee');
+    return '<tr>'
+      +'<td>'+fmtDate(i.date_debut||i.date_intervention)+(i.date_fin&&i.date_fin!==i.date_debut?'<br><span style="font-size:10px;color:#64748b">→ '+fmtDate(i.date_fin)+'</span>':'')+'</td>'
+      +'<td><span class="intv-duree">'+(INTV_DUREE_LABEL[i.duree]||i.duree)+'</span></td>'
+      +'<td>'+techAvatarHtml(tech,22)+' <span style="vertical-align:middle">'+(tech?getTechName(tech):'—')+'</span></td>'
+      +'<td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+(i.entreprise_id?'<span style="font-size:11px">'+i.entreprise_id+'</span>':'—')+'</td>'
+      +'<td><span class="intv-type-dot" style="background:'+esc(type.couleur)+'"></span>'+esc(type.label)+'</td>'
+      +'<td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(i.titre)+'</td>'
+      +'<td><span class="intv-status '+statusCls+'">'+(INTV_STATUS_LABEL[i.statut]||i.statut)+'</span></td>'
+      +'<td>'+(i.pipeline_stage?plPill(i.pipeline_stage):'—')+'</td>'
+      +'<td style="text-align:right">'
+      +(canEdit()?'<button class="btn btn-ghost" style="font-size:10px;padding:3px 8px" data-id="'+i.id+'" onclick="intvEditClick(this)">Éditer</button>':'')
+      +'</td></tr>';
+  }).join('');
+}
+
+function fmtDate(d){
+  if(!d) return '—';
+  try { return new Date(d).toLocaleDateString('fr-FR',{day:'2-digit',month:'short',year:'numeric'}); }
+  catch(_){ return d; }
+}
+
+function switchIntvTab(tab){
+  TECH_STATE.intvTab = tab;
+  document.getElementById('intv-cal-panel').style.display  = tab==='cal'  ? '' : 'none';
+  document.getElementById('intv-list-panel').style.display = tab==='list' ? '' : 'none';
+  const tabCal  = document.getElementById('intv-tab-cal');
+  const tabList = document.getElementById('intv-tab-list');
+  if(tabCal){  tabCal.style.borderBottomColor  = tab==='cal'  ? '#3b82f6':'transparent'; tabCal.style.color  = tab==='cal'  ?'#60a5fa':'#64748b'; }
+  if(tabList){ tabList.style.borderBottomColor = tab==='list' ? '#3b82f6':'transparent'; tabList.style.color = tab==='list' ?'#60a5fa':'#64748b'; }
+  if(tab==='cal') renderCurrentCalView();
+  else renderIntvList();
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// DROPDOWN TECHNICIENS — peuplement dynamique (actifs uniquement)
+// ─────────────────────────────────────────────────────────────────────────────
+function populateIntvTechDropdown(){
+  const sel = document.getElementById('intv-filter-tech');
+  if(!sel) return;
+  const currentVal = sel.value;
+  sel.innerHTML = '<option value="">Tous les techniciens</option>';
+  const src = REF_DATA.techniciens && REF_DATA.techniciens.length ? REF_DATA.techniciens : TECH_STATE.techniciens;
+  src.filter(function(t){ return t.statut ? t.statut==='actif' : t.actif; })
+    .forEach(function(t){
+      const o = document.createElement('option');
+      o.value = t.id;
+      o.textContent = t.prenom+' '+t.nom;
+      sel.appendChild(o);
+    });
+  if(currentVal) sel.value = currentVal;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SWITCH VUE CALENDRIER : Semaine / Mois / Année
+// ─────────────────────────────────────────────────────────────────────────────
+function switchCalView(view){
+  TECH_STATE.calView = view;
+  const btnW = document.getElementById('cal-view-btn-week');
+  const btnM = document.getElementById('cal-view-btn-month');
+  const btnY = document.getElementById('cal-view-btn-year');
+  const activeStyle  = 'padding:5px 14px;background:rgba(59,130,246,.18);border:1px solid #3b82f6;color:#60a5fa;font-size:11px;font-weight:700;cursor:pointer;';
+  const inactStyle   = 'padding:5px 14px;background:transparent;border:1px solid #334155;color:#64748b;font-size:11px;font-weight:600;cursor:pointer;';
+  if(btnW){ btnW.style.cssText = (view==='week'  ? activeStyle : inactStyle)+'border-radius:6px 0 0 6px;border-right:none;'; }
+  if(btnM){ btnM.style.cssText = (view==='month' ? activeStyle : inactStyle)+'border-radius:0;border-right:none;'; }
+  if(btnY){ btnY.style.cssText = (view==='year'  ? activeStyle : inactStyle)+'border-radius:0 6px 6px 0;'; }
+  const wk = document.getElementById('intv-cal-week-wrap');
+  const mo = document.getElementById('intv-cal-month-wrap');
+  const yr = document.getElementById('intv-cal-year-wrap');
+  if(wk) wk.style.display = view==='week'  ? '' : 'none';
+  if(mo) mo.style.display = view==='month' ? '' : 'none';
+  if(yr) yr.style.display = view==='year'  ? '' : 'none';
+  renderCurrentCalView();
+}
+
+function renderCurrentCalView(){
+  if(TECH_STATE.calView==='month')     renderCalendarMonth();
+  else if(TECH_STATE.calView==='year') renderCalendarYear();
+  else                                  renderCalendar();
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// NAVIGATION MOIS / ANNÉE
+// ─────────────────────────────────────────────────────────────────────────────
+function calNavMonth(dir){
+  TECH_STATE.calMonthOffset += dir;
+  const ref = new Date(); ref.setMonth(ref.getMonth() + TECH_STATE.calMonthOffset);
+  const y = ref.getFullYear(), m = ref.getMonth();
+  const from = y+'-'+String(m+1).padStart(2,'0')+'-01';
+  const lastD = new Date(y, m+1, 0).getDate();
+  const to   = y+'-'+String(m+1).padStart(2,'0')+'-'+String(lastD).padStart(2,'0');
+  const techId = (document.getElementById('intv-filter-tech')||{}).value||'';
+  const statut = (document.getElementById('intv-filter-statut')||{}).value||'';
+  let params = 'select=*&order=date_debut.asc&date_debut=lte.'+to+'&date_fin=gte.'+from;
+  if(techId) params += '&technicien_id=eq.'+techId;
+  if(statut) params += '&statut=eq.'+statut;
+  sbSelect('interventions', params).then(function(data){
+    if(Array.isArray(data)) TECH_STATE.interventions = data;
+    renderCalendarMonth();
+  }).catch(function(){ renderCalendarMonth(); });
+}
+
+function calNavYear(dir){
+  TECH_STATE.calYearOffset += dir;
+  const year = new Date().getFullYear() + TECH_STATE.calYearOffset;
+  const techId = (document.getElementById('intv-filter-tech')||{}).value||'';
+  const statut = (document.getElementById('intv-filter-statut')||{}).value||'';
+  let params = 'select=*&order=date_debut.asc&date_debut=lte.'+year+'-12-31&date_fin=gte.'+year+'-01-01';
+  if(techId) params += '&technicien_id=eq.'+techId;
+  if(statut) params += '&statut=eq.'+statut;
+  sbSelect('interventions', params).then(function(data){
+    if(Array.isArray(data)) TECH_STATE.interventions = data;
+    renderCalendarYear();
+  }).catch(function(){ renderCalendarYear(); });
+}
+
+function calGoToMonth(monthIdx, year){
+  // Calculer l'offset depuis maintenant
+  const now = new Date();
+  TECH_STATE.calMonthOffset = (year - now.getFullYear()) * 12 + (monthIdx - now.getMonth());
+  TECH_STATE.calView = 'month';
+  switchCalView('month');
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// VUE MOIS
+// ─────────────────────────────────────────────────────────────────────────────
+function renderCalendarMonth(){
+  const now  = new Date();
+  const ref  = new Date(now.getFullYear(), now.getMonth() + TECH_STATE.calMonthOffset, 1);
+  const y    = ref.getFullYear();
+  const m    = ref.getMonth();
+  const lastDay  = new Date(y, m+1, 0);
+  const from = y+'-'+String(m+1).padStart(2,'0')+'-01';
+  const to   = y+'-'+String(m+1).padStart(2,'0')+'-'+String(lastDay.getDate()).padStart(2,'0');
+
+  const label = document.getElementById('cal-month-label');
+  if(label) label.textContent = ref.toLocaleDateString('fr-FR',{month:'long',year:'numeric'});
+
+  const body = document.getElementById('cal-month-body');
+  if(!body) return;
+
+  const filterTech = (document.getElementById('intv-filter-tech')||{}).value||'';
+  const intvs = TECH_STATE.interventions.filter(function(i){
+    if(i.statut==='annulee') return false;
+    const debut = i.date_debut||i.date_intervention;
+    const fin   = i.date_fin||debut;
+    if(filterTech && String(i.technicien_id)!==String(filterTech)) return false;
+    return debut<=to && fin>=from;
+  });
+
+  const today = now.toISOString().slice(0,10);
+  const startOffset = (new Date(y,m,1).getDay()+6)%7; // 0=Lun
+  const dayNames = ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
+
+  let html = '<div style="display:grid;grid-template-columns:repeat(7,1fr);border-top:1px solid #334155">';
+  dayNames.forEach(function(d){
+    html += '<div style="padding:6px;text-align:center;font-size:10px;font-weight:700;color:#64748b;border-right:1px solid #1e293b;border-bottom:1px solid #334155;background:#0f172a">'+d+'</div>';
+  });
+  for(let i=0;i<startOffset;i++){
+    html += '<div style="border-right:1px solid #1e293b;border-bottom:1px solid #1e293b;min-height:72px;background:#0a1525"></div>';
+  }
+  for(let day=1; day<=lastDay.getDate(); day++){
+    const ds = y+'-'+String(m+1).padStart(2,'0')+'-'+String(day).padStart(2,'0');
+    const isToday = ds===today;
+    const dayIntvs = intvs.filter(function(i){
+      const debut=i.date_debut||i.date_intervention; const fin=i.date_fin||debut;
+      return ds>=debut && ds<=fin;
+    });
+    html += '<div style="border-right:1px solid #1e293b;border-bottom:1px solid #1e293b;min-height:72px;padding:4px;background:'+(isToday?'rgba(59,130,246,.07)':'#0f172a')+'">';
+    html += '<div style="font-size:11px;font-weight:700;color:'+(isToday?'#60a5fa':'#94a3b8')+'">'+day+'</div>';
+    dayIntvs.slice(0,3).forEach(function(i){
+      const type  = getTypeIntervention(i.type_intervention);
+      const tech  = getTechById(i.technicien_id);
+      const lbl   = (tech?esc(tech.prenom[0]+'.'+tech.nom.slice(0,7))+' ':'') + esc((i.titre||'').slice(0,14));
+      html += '<div style="font-size:9px;padding:1px 4px;border-radius:3px;margin-bottom:1px;background:'+esc(type.couleur)+'22;color:'+esc(type.couleur)+';overflow:hidden;white-space:nowrap;text-overflow:ellipsis;cursor:pointer" data-id="'+i.id+'" onclick="calEventClick(this)" title="'+esc(i.titre)+'">'+lbl+'</div>';
+    });
+    if(dayIntvs.length>3) html += '<div style="font-size:9px;color:#64748b">+' +(dayIntvs.length-3)+' de plus</div>';
+    html += '</div>';
+  }
+  html += '</div>';
+  body.innerHTML = html;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// VUE ANNÉE
+// ─────────────────────────────────────────────────────────────────────────────
+function renderCalendarYear(){
+  const year  = new Date().getFullYear() + TECH_STATE.calYearOffset;
+  const label = document.getElementById('cal-year-label');
+  if(label) label.textContent = String(year);
+  const body  = document.getElementById('cal-year-body');
+  if(!body) return;
+
+  const filterTech = (document.getElementById('intv-filter-tech')||{}).value||'';
+  const intvs = TECH_STATE.interventions.filter(function(i){
+    if(i.statut==='annulee') return false;
+    if(filterTech && String(i.technicien_id)!==String(filterTech)) return false;
+    const debut = i.date_debut||i.date_intervention;
+    return debut && debut.startsWith(String(year));
+  });
+
+  const monthNames=['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+  const maxCount = Math.max(1, ...Array.from({length:12},function(_,m){
+    const ms=String(year)+'-'+String(m+1).padStart(2,'0');
+    return intvs.filter(function(i){return (i.date_debut||i.date_intervention||'').startsWith(ms);}).length;
+  }));
+
+  let html = '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:16px">';
+  for(let m=0;m<12;m++){
+    const ms = String(year)+'-'+String(m+1).padStart(2,'0');
+    const cnt = intvs.filter(function(i){return (i.date_debut||i.date_intervention||'').startsWith(ms);}).length;
+    const intensity = cnt===0 ? 0 : 0.12 + (cnt/maxCount)*0.55;
+    const bg  = cnt===0 ? '#1e293b' : 'rgba(59,130,246,'+intensity.toFixed(2)+')';
+    const col = cnt===0 ? '#334155' : '#93c5fd';
+    html += '<div style="background:'+bg+';border:1px solid '+(cnt>0?'rgba(59,130,246,.3)':'#334155')+';border-radius:8px;padding:12px;cursor:'+(cnt>0?'pointer':'default')+'" '+(cnt>0?'onclick="calGoToMonth('+m+','+year+')"':'')+' title="'+monthNames[m]+' — '+cnt+' intervention'+(cnt>1?'s':'')+'">'
+      +'<div style="font-size:11px;font-weight:700;color:#94a3b8;margin-bottom:6px">'+monthNames[m]+'</div>'
+      +'<div style="font-size:24px;font-weight:800;color:'+col+'">'+cnt+'</div>'
+      +'<div style="font-size:9px;color:#64748b">intervention'+(cnt>1?'s':'')+'</div>'
+      +'</div>';
+  }
+  html += '</div>';
+  body.innerHTML = html;
+}
+
+
+function calGetWeekStart(){
+  const now = new Date();
+  const monday = new Date(now);
+  monday.setDate(now.getDate() - ((now.getDay()+6)%7) + TECH_STATE.calWeekOffset*7);
+  monday.setHours(0,0,0,0);
+  return monday;
+}
+
+function calNavWeek(dir){
+  TECH_STATE.calWeekOffset += dir;
+  // Recalculer la semaine cible et recharger les données
+  const monday = calGetWeekStart();
+  const sunday = new Date(monday); sunday.setDate(monday.getDate()+6);
+  const from = monday.toISOString().slice(0,10);
+  const to   = sunday.toISOString().slice(0,10);
+  const techId = (document.getElementById('intv-filter-tech')||{}).value||'';
+  const statut = (document.getElementById('intv-filter-statut')||{}).value||'';
+  let params = 'select=*&order=date_debut.asc';
+  if(techId) params += '&technicien_id=eq.'+techId;
+  if(statut) params += '&statut=eq.'+statut;
+  params += '&date_debut=lte.'+to+'&date_fin=gte.'+from;
+  sbSelect('interventions', params).then(function(data){
+    if(Array.isArray(data)) TECH_STATE.interventions = data;
+    renderCalendar();
+  }).catch(function(){ renderCalendar(); });
+}
+function calGoToday(){
+  TECH_STATE.calWeekOffset = 0;
+  renderInterventions();
+}
+
+// Helper : bouton + dans cellule calendrier (data-attribute pattern)
+function calAddIntervention(btn){
+  var ds  = btn.getAttribute('data-ds');
+  var tid = btn.getAttribute('data-tid');
+  openInterventionModal(null, ds, tid);
+}
+
+// Helper : bouton Éditer dans liste interventions (data-attribute pattern)
+function intvEditClick(btn){
+  var id = btn.getAttribute('data-id');
+  openInterventionModal(id);
+}
+
+// Helper : clic sur event calendrier existant
+function calEventClick(btn){
+  var id = btn.getAttribute('data-id');
+  openInterventionModal(id);
+}
+
+function renderCalendar(){
+  const grid = document.getElementById('cal-grid-body');
+  const label = document.getElementById('cal-week-label');
+  if(!grid) return;
+
+  const monday = calGetWeekStart();
+  const days = [];
+  for(let i=0;i<7;i++){
+    const d = new Date(monday);
+    d.setDate(monday.getDate()+i);
+    days.push(d);
+  }
+
+  // Label semaine
+  const opts = {day:'2-digit',month:'short'};
+  if(label) label.textContent = 'Semaine du '+monday.toLocaleDateString('fr-FR',opts)+' au '+days[6].toLocaleDateString('fr-FR',opts);
+
+  // Filtrer les interventions qui se chevauchent avec cette semaine
+  const from = monday.toISOString().slice(0,10);
+  const to   = days[6].toISOString().slice(0,10);
+  const intvs = TECH_STATE.interventions.filter(function(i){
+    if(i.statut === 'annulee') return false;
+    const debut = i.date_debut || i.date_intervention;
+    const fin   = i.date_fin   || debut;
+    return debut <= to && fin >= from;
+  });
+
+  // Techniciens à afficher (filtrés si filtre actif)
+  const filterTech = (document.getElementById('intv-filter-tech')||{}).value||'';
+  let techs = (REF_DATA.techniciens || TECH_STATE.techniciens).filter(t=> t.statut ? t.statut==='actif' : t.actif);
+  if(filterTech) techs = techs.filter(t=>String(t.id)===String(filterTech));
+
+  const today = new Date().toISOString().slice(0,10);
+
+  // Construire header
+  let html = '<div class="cal-col-header" style="background:#0f172a"></div>';
+  days.forEach(function(d){
+    const ds = d.toISOString().slice(0,10);
+    const isToday = ds===today;
+    const dayNames = ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'];
+    html += '<div class="cal-col-header'+(isToday?' today':'')+'">'+dayNames[d.getDay()]+'<br><span style="font-size:12px;font-weight:700">'+d.getDate()+'</span></div>';
+  });
+
+  // Ligne par technicien
+  techs.forEach(function(t){
+    // Calcul taux semaine
+    const myIntvs = intvs.filter(i=>i.technicien_id===t.id);
+    const joursUtilises = myIntvs.reduce(function(acc,i){
+      const debut = i.date_debut || i.date_intervention;
+      const fin   = i.date_fin   || debut;
+      // Intersecter avec la semaine affichée
+      const d1 = new Date(Math.max(new Date(debut), new Date(from)));
+      const d2 = new Date(Math.min(new Date(fin),   new Date(to)));
+      const jours = Math.max(0, Math.round((d2-d1)/(1000*60*60*24))+1);
+      return acc + jours;
+    }, 0);
+    const tauxPct = Math.min(100,Math.round(joursUtilises/5*100));
+    const warn = tauxPct>=85?' warn':'';
+
+    // Label technicien
+    html += '<div class="cal-row-label">'
+      +techAvatarHtml(t,28)
+      +'<div style="overflow:hidden">'
+      +'<div style="font-size:11px;font-weight:700;color:#f1f5f9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+esc(t.prenom)+' '+esc(t.nom)+'</div>'
+      +'<div class="cal-taux-bar" style="width:80px;margin-top:3px"><div class="cal-taux-fill'+warn+'" style="width:'+tauxPct+'%"></div></div>'
+      +'<div style="font-size:9px;color:#64748b">'+tauxPct+'% util.</div>'
+      +'</div></div>';
+
+    // Cellules
+    days.forEach(function(d){
+      const ds = d.toISOString().slice(0,10);
+      const dayIntvs = myIntvs.filter(function(i){
+        const debut = i.date_debut || i.date_intervention;
+        const fin   = i.date_fin   || debut;
+        return ds >= debut && ds <= fin;
+      });
+      const isToday = ds===today;
+      html += '<div class="cal-cell" style="'+(isToday?'background:rgba(59,130,246,.05)':'')+'">'; 
+      dayIntvs.forEach(function(i){
+        const type  = getTypeIntervention(i.type_intervention);
+        const debut = i.date_debut || i.date_intervention;
+        const fin   = i.date_fin   || debut;
+        const isFirst = ds === debut;
+        const durJours = Math.max(1, Math.round((new Date(fin)-new Date(debut))/(1000*60*60*24))+1);
+        const durLabel = durJours > 1 ? durJours+'j' : '';
+        const borderStyle = isFirst
+          ? 'border-left:3px solid '+esc(type.couleur)+';border-radius:4px 0 0 4px'
+          : 'border-left:1px dashed '+esc(type.couleur)+';opacity:.8;border-radius:0';
+        html += '<div class="cal-event" style="background:'+esc(type.couleur)+'22;color:'+esc(type.couleur)+';'+borderStyle+'" '
+          +'title="'+esc(i.titre)+' ('+esc(debut)+' -> '+esc(fin)+')" '
+          +'data-id="'+i.id+'" onclick="calEventClick(this)">'
+          +(isFirst ? esc(i.titre.length>15?i.titre.slice(0,14)+'\u2026':i.titre)+(durLabel?' <span style="opacity:.6;font-size:9px">'+durLabel+'</span>':'') : '&nbsp;')
+          +'</div>';
+      });
+      if(canEdit()){
+        html += '<div style="text-align:center;margin-top:2px">'
+          +'<button data-ds="'+ds+'" data-tid="'+t.id+'" onclick="calAddIntervention(this)" style="background:transparent;border:1px dashed #334155;border-radius:4px;color:#475569;font-size:10px;cursor:pointer;padding:1px 5px;width:100%">+</button>'
+          +'</div>';
+      }
+      html += '</div>';
+    });
+  });
+
+  // Ligne vide si aucun tech
+  if(!techs.length){
+    html += '<div class="cal-row-label" style="grid-column:1/-1;color:#475569;font-size:12px;padding:20px">Aucun technicien actif.</div>';
+  }
+
+  grid.style.gridTemplateColumns = '120px repeat(7,1fr)';
+  grid.innerHTML = html;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// INTERVENTION — modal creation / edition
+// ─────────────────────────────────────────────────────────────────────────────
+async function openInterventionModal(id, preDate, preTechId){
+  let intv = null;
+  if(id && id!=='null'){
+    try { const r = await sbSelect('interventions','select=*&id=eq.'+id); intv = Array.isArray(r)&&r.length?r[0]:null; } catch(_){}
+  }
+  const editable = canEdit();
+  const v = function(f){ return intv ? (intv[f]||'') : ''; };
+
+  // Options techniciens (actifs seulement, + assigné actuel si inactif/archivé)
+  const techOptions = (REF_DATA.techniciens||[]).filter(function(t){
+    const s = t.statut||(t.actif?'actif':'inactif');
+    return s==='actif' || (intv && String(t.id)===String(intv.technicien_id));
+  }).map(function(t){
+    const sel = (preTechId&&String(t.id)===String(preTechId))||(intv&&String(t.id)===String(intv.technicien_id))?'selected':'';
+    return '<option value="'+t.id+'" '+sel+'>'+esc(t.prenom)+' '+esc(t.nom)+'</option>';
+  }).join('');
+
+  // Options types
+  const typeOptions = (REF_DATA.type_intervention||[]).map(function(t){
+    const sel = intv&&intv.type_intervention===t.code?'selected':'';
+    return '<option value="'+t.code+'" '+sel+'>'+esc(t.label)+'</option>';
+  }).join('');
+
+  // Options pipeline
+  const plStages = ['new','contacted','qualified','meeting','quoted','negotiating','won','lost','inactive'];
+  const plOptions = plStages.map(function(s){
+    const sel = intv&&intv.pipeline_stage===s?'selected':'';
+    return '<option value="'+s+'" '+sel+'>'+(PL_LABEL[s]||s)+'</option>';
+  }).join('');
+
+  const selStyle = 'width:100%;margin-top:4px;padding:8px;background:#0f172a;border:1px solid #334155;border-radius:8px;color:#e2e8f0;font-size:12px;box-sizing:border-box';
+  const inpStyle = 'width:100%;margin-top:4px;padding:8px;background:#0f172a;border:1px solid #334155;border-radius:8px;color:#e2e8f0;font-size:12px;box-sizing:border-box';
+  const dis = editable?'':'disabled';
+  const idStr = (id && id!=='null') ? id : 'null';
+
+  // Valeurs entreprise existante
+  const entrepriseId   = v('entreprise_id');
+  const entrepriseName = intv ? (intv._entreprise_name||'') : '';
+
+  let html = '<div style="padding:4px 0 0 0">'
+    +'<h2 style="font-size:15px;font-weight:700;color:#f1f5f9;margin-bottom:16px">'+(id&&id!=='null'?'Intervention':'Nouvelle intervention')+'</h2>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">'
+
+    // Technicien
+    +'<div style="grid-column:1/-1"><label style="font-size:10px;color:#64748b;font-weight:600;text-transform:uppercase;letter-spacing:.6px">Technicien *</label>'
+    +'<select id="intv-tech-id" '+dis+' style="'+selStyle+'"><option value="">— Choisir —</option>'+techOptions+'</select></div>'
+
+    // Titre
+    +'<div style="grid-column:1/-1">'+fld('Titre *','intv-titre','text',esc(v('titre')),editable)+'</div>'
+
+    // Entreprise — autocomplete
+    +'<div style="grid-column:1/-1;position:relative">'
+    +'<label style="font-size:10px;color:#64748b;font-weight:600;text-transform:uppercase;letter-spacing:.6px">Client / Entreprise</label>'
+    +'<input id="intv-entreprise-search" type="text" autocomplete="off" placeholder="Taper le nom du client..." '
+    +(dis?'disabled':'')+' value="'+esc(entrepriseName)+'" '
+    +'style="'+inpStyle+'" oninput="intvSearchEntreprise(this.value)">'
+    +'<input type="hidden" id="intv-entreprise-id" value="'+esc(String(entrepriseId))+'">'
+    +'<div id="intv-entreprise-dropdown" style="display:none;position:absolute;top:100%;left:0;right:0;background:#1e293b;border:1px solid #3b82f6;border-radius:8px;z-index:500;max-height:200px;overflow-y:auto;box-shadow:0 8px 24px rgba(0,0,0,.4)"></div>'
+    +'</div>'
+
+    // Infos entreprise auto-remplies
+    +'<div style="grid-column:1/-1" id="intv-entreprise-info"></div>'
+
+    // Type + Statut
+    +'<div><label style="font-size:10px;color:#64748b;font-weight:600;text-transform:uppercase;letter-spacing:.6px">Type</label>'
+    +'<select id="intv-type" '+dis+' style="'+selStyle+'"><option value="">— Choisir —</option>'+typeOptions+'</select></div>'
+
+    +'<div><label style="font-size:10px;color:#64748b;font-weight:600;text-transform:uppercase;letter-spacing:.6px">Statut</label>'
+    +'<select id="intv-statut" '+dis+' style="'+selStyle+'">'
+    +'<option value="planifiee" '+(v('statut')==='planifiee'||!intv?'selected':'')+'>Planifiée</option>'
+    +'<option value="confirmee" '+(v('statut')==='confirmee'?'selected':'')+'>Confirmée</option>'
+    +'<option value="en_cours" '+(v('statut')==='en_cours'?'selected':'')+'>En cours</option>'
+    +'<option value="terminee" '+(v('statut')==='terminee'?'selected':'')+'>Terminée</option>'
+    +'<option value="annulee" '+(v('statut')==='annulee'?'selected':'')+'>Annulée</option>'
+    +'</select></div>'
+
+    // Date début + Date fin
+    +'<div>'+fld('Date début *','intv-date-debut','date',preDate||v('date_debut'),editable)+'</div>'
+    +'<div>'+fld('Date fin *','intv-date-fin','date',preDate||v('date_fin'),editable)+'</div>'
+
+    // Lieu (auto-rempli mais modifiable)
+    +'<div style="grid-column:1/-1">'+fld('Lieu / Site client','intv-lieu','text',esc(v('lieu')),editable)+'</div>'
+
+    // Pipeline
+    +'<div><label style="font-size:10px;color:#64748b;font-weight:600;text-transform:uppercase;letter-spacing:.6px">Étape pipeline</label>'
+    +'<select id="intv-pipeline" '+dis+' style="'+selStyle+'"><option value="">— Aucune —</option>'+plOptions+'</select></div>'
+
+    +'<div></div></div>'
+
+    // Description
+    +'<div style="margin-top:10px"><label style="font-size:10px;color:#64748b;font-weight:600;text-transform:uppercase;letter-spacing:.6px">Description</label>'
+    +'<textarea id="intv-description" '+dis+' style="width:100%;margin-top:4px;padding:8px;background:#0f172a;border:1px solid #334155;border-radius:8px;color:#e2e8f0;font-size:12px;resize:vertical;min-height:60px;box-sizing:border-box">'+esc(v('description'))+'</textarea></div>'
+
+    // Rapport
+    +(id&&id!=='null'?'<div style="margin-top:10px;padding:12px;background:#0f172a;border:1px solid #334155;border-radius:8px">'
+      +'<div style="font-size:11px;font-weight:700;color:#94a3b8;margin-bottom:8px">COMPTE-RENDU POST-INTERVENTION</div>'
+      +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">'
+      +fld('Date rapport','intv-rapport-date','date',v('rapport_date'),editable)
+      +'<div></div></div>'
+      +'<div style="margin-top:8px"><label style="font-size:10px;color:#64748b;font-weight:600;text-transform:uppercase;letter-spacing:.6px">Rapport</label>'
+      +'<textarea id="intv-rapport" '+dis+' style="width:100%;margin-top:4px;padding:8px;background:#1e293b;border:1px solid #334155;border-radius:8px;color:#e2e8f0;font-size:12px;resize:vertical;min-height:80px;box-sizing:border-box">'+esc(v('rapport'))+'</textarea></div>'
+      +'</div>':'');
+
+  if(editable){
+    html += '<div style="display:flex;gap:8px;margin-top:18px;justify-content:flex-end">';
+    if(id&&id!=='null'&&canDelete()) html += '<button class="btn" style="background:rgba(239,68,68,.15);color:#fca5a5;border:1px solid rgba(239,68,68,.3);font-size:11px" onclick="deleteIntervention(\''+idStr+'\')" >Supprimer</button>';
+    html += '<button class="btn btn-ghost" style="font-size:11px" onclick="closeModal()">Annuler</button>';
+    html += '<button class="btn btn-primary" style="font-size:11px" onclick="saveIntervention(\''+idStr+'\')"> '+(id&&id!=='null'?'Enregistrer':'Créer')+'</button>';
+    html += '</div>';
+  } else {
+    html += '<div style="display:flex;gap:8px;margin-top:18px;justify-content:flex-end"><button class="btn btn-ghost" onclick="closeModal()">Fermer</button></div>';
+  }
+  html += '</div>';
+
+  document.getElementById('modal-content').innerHTML = html;
+  document.getElementById('modal-overlay').classList.add('open');
+
+  // Si édition et entreprise existante, recharger l'info client
+  if(intv && intv.entreprise_id){
+    intvLoadEntrepriseInfo(intv.entreprise_id);
+  }
+}
+
+// ─── Autocomplete entreprise dans intervention ────────────────────────────────
+let _intvSearchTimer = null;
+async function intvSearchEntreprise(q){
+  const dd = document.getElementById('intv-entreprise-dropdown');
+  if(!dd) return;
+  if(!q || q.length < 2){
+    dd.style.display = 'none';
+    document.getElementById('intv-entreprise-id').value = '';
+    document.getElementById('intv-entreprise-info').innerHTML = '';
+    return;
+  }
+  clearTimeout(_intvSearchTimer);
+  _intvSearchTimer = setTimeout(async function(){
+    try {
+      const rows = await sbSelect('entreprises',
+        'select=id,name,city,country,address_line1,postal_code&name=ilike.*'+encodeURIComponent(q)+'*&limit=10&order=name');
+      if(!Array.isArray(rows)||!rows.length){ dd.innerHTML='<div style="padding:10px 12px;font-size:11px;color:#64748b">Aucun résultat</div>'; dd.style.display='block'; return; }
+      dd.innerHTML = rows.map(function(r){
+        const loc = [r.city, r.country].filter(Boolean).join(', ');
+        return '<div data-id="'+r.id+'" data-name="'+esc(r.name)+'" onclick="intvClickEntreprise(this)" '
+          +'style="padding:8px 12px;cursor:pointer;font-size:12px;color:#f1f5f9;border-bottom:1px solid #334155" '
+          +'class="intv-dd-item">'
+          +'<div style="font-weight:600">'+esc(r.name)+'</div>'
+          +(loc?'<div style="font-size:10px;color:#64748b">'+esc(loc)+'</div>':'')
+          +'</div>';
+      }).join('');
+      dd.style.display = 'block';
+    } catch(e){ dd.style.display='none'; }
+  }, 250);
+}
+
+function intvClickEntreprise(el){
+  var id   = el.getAttribute('data-id');
+  var name = el.getAttribute('data-name');
+  intvSelectEntreprise(id, name);
+}
+
+async function intvSelectEntreprise(id, name){
+  const inp = document.getElementById('intv-entreprise-search');
+  const hid = document.getElementById('intv-entreprise-id');
+  const dd  = document.getElementById('intv-entreprise-dropdown');
+  if(inp) inp.value = name;
+  if(hid) hid.value = id;
+  if(dd)  dd.style.display = 'none';
+  intvLoadEntrepriseInfo(id);
+}
+
+async function intvLoadEntrepriseInfo(id){
+  const container = document.getElementById('intv-entreprise-info');
+  if(!container) return;
+  container.innerHTML = '<div style="font-size:11px;color:#64748b;padding:4px 0">Chargement...</div>';
+  try {
+    const rows = await sbSelect('entreprises','select=id,name,address_line1,address_line2,postal_code,city,state_region,country&id=eq.'+id);
+    const contacts = await sbSelect('contacts','select=id,first_name,last_name,email,phone,job_title&company_id=eq.'+id+'&order=id&limit=10');
+    const co = Array.isArray(rows)&&rows.length ? rows[0] : null;
+    if(!co){ container.innerHTML=''; return; }
+
+    // Adresse → auto-remplir le champ Lieu si vide
+    const addrParts = [co.address_line1, co.address_line2, co.postal_code, co.city, co.country].filter(Boolean);
+    const addrStr = addrParts.join(', ');
+    const lieuInput = document.getElementById('intv-lieu');
+    if(lieuInput && !lieuInput.value && addrStr) lieuInput.value = addrStr;
+
+    // Afficher le bloc info
+    let infoHtml = '<div style="margin:8px 0;padding:10px 12px;background:#0f172a;border:1px solid #334155;border-radius:8px;font-size:11px">'
+      +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">'
+      +'<span style="font-weight:700;color:#f1f5f9">'+esc(co.name)+'</span>'
+      +'</div>';
+
+    if(addrStr) infoHtml += '<div style="color:#94a3b8;margin-bottom:6px">📍 '+esc(addrStr)+'</div>';
+
+    // Contacts
+    if(Array.isArray(contacts)&&contacts.length){
+      infoHtml += '<div style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.6px;margin-bottom:4px">Contact principal</div>';
+      const c = contacts[0];
+      const cname = [c.first_name, c.last_name].filter(Boolean).join(' ');
+      infoHtml += '<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">'
+        +'<span style="color:#e2e8f0;font-weight:600">'+esc(cname||'—')+'</span>'
+        +(c.job_title?'<span style="color:#64748b">'+esc(c.job_title)+'</span>':'')
+        +(c.email?'<a href="mailto:'+esc(c.email)+'" style="color:#60a5fa;text-decoration:none">'+esc(c.email)+'</a>':'')
+        +(c.phone?'<span style="color:#94a3b8">'+esc(c.phone)+'</span>':'')
+        +'</div>';
+
+      // Dropdown si plusieurs contacts
+      if(contacts.length > 1){
+        const contactOpts = contacts.map(function(c2){
+          const n = [c2.first_name, c2.last_name].filter(Boolean).join(' ');
+          return '<option value="'+c2.id+'">'+(n||'—')+(c2.job_title?' — '+c2.job_title:'')+'</option>';
+        }).join('');
+        infoHtml += '<div style="margin-top:6px"><label style="font-size:10px;color:#64748b">Choisir un autre contact :</label>'
+          +'<select id="intv-contact-id" style="width:100%;margin-top:3px;padding:6px;background:#1e293b;border:1px solid #334155;border-radius:6px;color:#e2e8f0;font-size:11px">'
+          +contactOpts+'</select></div>';
+      } else {
+        infoHtml += '<input type="hidden" id="intv-contact-id" value="'+contacts[0].id+'">';
+      }
+    }
+    infoHtml += '</div>';
+    container.innerHTML = infoHtml;
+  } catch(e){ container.innerHTML = '<div style="font-size:11px;color:#ef4444">Erreur: '+esc(e.message)+'</div>'; }
+}
+
+async function saveIntervention(id){
+  const techId = document.getElementById('intv-tech-id').value;
+  const titre  = (document.getElementById('intv-titre').value||'').trim();
+  const dateDebut = document.getElementById('intv-date-debut').value;
+  const dateFin   = document.getElementById('intv-date-fin').value;
+  if(!techId)    { toast('Sélectionnez un technicien'); return; }
+  if(!titre)     { toast('Titre obligatoire'); return; }
+  if(!dateDebut) { toast('Date de début obligatoire'); return; }
+  if(!dateFin)   { toast('Date de fin obligatoire'); return; }
+  if(dateFin < dateDebut){ toast('Date de fin antérieure à la date de début'); return; }
+
+  const entrepriseId = document.getElementById('intv-entreprise-id') ? (document.getElementById('intv-entreprise-id').value||null) : null;
+  const contactEl    = document.getElementById('intv-contact-id');
+  const contactId    = contactEl ? (contactEl.value||null) : null;
+
+  const payload = {
+    technicien_id:    techId,
+    titre,
+    type_intervention: document.getElementById('intv-type').value || null,
+    statut:           document.getElementById('intv-statut').value,
+    date_debut:       dateDebut,
+    date_fin:         dateFin,
+    date_intervention: dateDebut,  // rétrocompat
+    entreprise_id:    entrepriseId ? parseInt(entrepriseId,10) : null,
+    contact_id:       contactId    ? parseInt(contactId,10)    : null,
+    lieu:             (document.getElementById('intv-lieu').value||'').trim()||null,
+    pipeline_stage:   document.getElementById('intv-pipeline').value||null,
+    description:      (document.getElementById('intv-description').value||'').trim()||null,
+    updated_at:       new Date().toISOString()
+  };
+  if(id && id!=='null'){
+    const rapportEl     = document.getElementById('intv-rapport');
+    const rapportDateEl = document.getElementById('intv-rapport-date');
+    if(rapportEl)     payload.rapport      = rapportEl.value.trim()||null;
+    if(rapportDateEl) payload.rapport_date = rapportDateEl.value||null;
+  }
+
+  try {
+    if(!id || id==='null') await _sbInsertUuid('interventions', payload);
+    else    await _sbRestUuid('PATCH', 'interventions', id, payload);
+    toast(id&&id!=='null' ? 'Intervention mise à jour' : 'Intervention créée');
+    closeModal();
+    renderInterventions();
+  } catch(e){ toast('Erreur : '+e.message); }
+}
+
+async function deleteIntervention(id){
+  if(!confirm('Supprimer cette intervention ?')) return;
+  try {
+    await _sbRestUuid('DELETE', 'interventions', id, null);
+    toast('Intervention supprimée');
+    closeModal();
+    renderInterventions();
+  } catch(e){ toast('Erreur : '+e.message); }
+}
+
+// ─── Helpers AUTH pour tables uuid (techniciens, interventions) ──────────────
+function _getSessionToken(){
+  // Priorité : JWT session Supabase → sinon anon key
+  return sessionStorage.getItem('sb_access_token') || SUPABASE_ANON_KEY || '';
+}
+
+async function _sbRestUuid(method, table, id, payload){
+  const cfg = getSupabaseCfg();
+  const token = _getSessionToken();
+  const headers = {
+    'apikey': cfg.key,
+    'Authorization': 'Bearer '+token,
+    'Prefer': 'return=minimal'
+  };
+  if(payload) headers['Content-Type'] = 'application/json';
+  const resp = await fetch(cfg.url+'/rest/v1/'+table+'?id=eq.'+id, {
+    method,
+    headers,
+    body: payload ? JSON.stringify(payload) : undefined
+  });
+  if(!resp.ok){ const t=await resp.text(); throw new Error(t||method+' '+table+' error HTTP '+resp.status); }
+}
+
+async function _sbInsertUuid(table, payload){
+  const cfg = getSupabaseCfg();
+  const token = _getSessionToken();
+  const resp = await fetch(cfg.url+'/rest/v1/'+table, {
+    method: 'POST',
+    headers: {
+      'apikey': cfg.key,
+      'Authorization': 'Bearer '+token,
+      'Content-Type': 'application/json',
+      'Prefer': 'return=minimal'
+    },
+    body: JSON.stringify(payload)
+  });
+  if(!resp.ok){ const t=await resp.text(); throw new Error(t||'INSERT '+table+' error HTTP '+resp.status); }
+}
+
 
 </script>
 
@@ -5190,19 +6507,6 @@ document.getElementById("current-user").textContent =
   const sbAnon = (typeof SUPABASE_ANON_KEY !== 'undefined' && SUPABASE_ANON_KEY) || localStorage.getItem('dcm_supabase_anon') || '';
   if (sbUrl && sbAnon) {
     window._sbClient = window.supabase.createClient(sbUrl, sbAnon);
-    // Auto-refresh JWT — met à jour sb_access_token à chaque renouvellement (~1h)
-    window._sbClient.auth.onAuthStateChange(function(event, session) {
-      if (session && session.access_token) {
-        sessionStorage.setItem('sb_access_token',  session.access_token);
-        sessionStorage.setItem('sb_refresh_token', session.refresh_token || '');
-      }
-      if (event === 'SIGNED_OUT') {
-        sessionStorage.removeItem('sb_access_token');
-        sessionStorage.removeItem('sb_refresh_token');
-        sessionStorage.removeItem('user_email');
-        sessionStorage.removeItem('user_role');
-      }
-    });
   }
 
   if (!sessionStorage.getItem('user_email')) {
