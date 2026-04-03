@@ -3929,11 +3929,17 @@ async function loadReferenceData() {
 
   // techniciens (liste complète pour dropdowns)
   try {
-    const techs = await sbSelect('techniciens', 'select=id,nom,prenom,specialite,zone_geographique,actif,statut,photo_url&order=nom');
-    if (Array.isArray(techs) && techs.length > 0) {
+    let techs = null;
+    try {
+      techs = await sbSelect('techniciens', 'select=id,nom,prenom,specialite,zone_geographique,actif,statut,photo_url&order=nom');
+    } catch(_) {
+      // statut column may not exist yet — retry without it
+      techs = await sbSelect('techniciens', 'select=id,nom,prenom,specialite,zone_geographique,actif,photo_url&order=nom');
+    }
+    if (Array.isArray(techs)) {
       REF_DATA.techniciens = techs;
       const nb = document.getElementById('nb-techniciens');
-      if (nb) nb.textContent = techs.filter(t=>t.actif).length;
+      if (nb) nb.textContent = techs.filter(t=>(t.statut ? t.statut==='actif' : t.actif)).length;
     }
   } catch(e) { console.warn('[REF] techniciens:', e.message); }
 
@@ -5681,12 +5687,25 @@ async function openInterventionModal(id, preDate, preTechId){
   const v = function(f){ return intv ? (intv[f]||'') : ''; };
 
   // Options techniciens (actifs seulement, + assigné actuel si inactif/archivé)
-  const techOptions = (REF_DATA.techniciens||[]).filter(function(t){
-    const s = t.statut||(t.actif?'actif':'inactif');
-    return s==='actif' || (intv && String(t.id)===String(intv.technicien_id));
+  // Source techniciens : REF_DATA (priorité) → TECH_STATE (fallback) → fetch direct si tout vide
+  let _mts = (REF_DATA.techniciens && REF_DATA.techniciens.length)
+    ? REF_DATA.techniciens
+    : (TECH_STATE.techniciens && TECH_STATE.techniciens.length ? TECH_STATE.techniciens : null);
+  if(!_mts){
+    try {
+      const _f = await sbSelect('techniciens','select=id,nom,prenom,actif&order=nom');
+      _mts = Array.isArray(_f) ? _f : [];
+      if(_mts.length) REF_DATA.techniciens = _mts;
+    } catch(_){ _mts = []; }
+  }
+  const _aid = intv ? String(intv.technicien_id||'') : '';
+  const _pid = preTechId ? String(preTechId) : '';
+  const techOptions = _mts.filter(function(t){
+    const s = t.statut ? t.statut : (t.actif ? 'actif' : 'inactif');
+    return s==='actif' || (_aid && String(t.id)===_aid);
   }).map(function(t){
-    const sel = (preTechId&&String(t.id)===String(preTechId))||(intv&&String(t.id)===String(intv.technicien_id))?'selected':'';
-    return '<option value="'+t.id+'" '+sel+'>'+esc(t.prenom)+' '+esc(t.nom)+'</option>';
+    const sel = (_pid && String(t.id)===_pid)||(_aid && String(t.id)===_aid) ? ' selected' : '';
+    return '<option value="'+t.id+'"'+sel+'>'+esc(t.prenom)+' '+esc(t.nom)+'</option>';
   }).join('');
 
   // Options types
