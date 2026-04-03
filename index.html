@@ -3741,6 +3741,11 @@ async function init(){
   setSbInitState('loading');
 
   try{
+    // ── 0. Si un refresh token existe, le renouveler avant de charger
+    if(sessionStorage.getItem('sb_refresh_token')){
+      await _refreshSessionToken();
+    }
+
     // ── 1. Charger les entreprises (paginé, toutes les lignes)
     setSbInitMsg('Chargement des entreprises depuis Supabase…');
     const companies = await sbSelectAll('entreprises', 1000);
@@ -3929,17 +3934,11 @@ async function loadReferenceData() {
 
   // techniciens (liste complète pour dropdowns)
   try {
-    let techs = null;
-    try {
-      techs = await sbSelect('techniciens', 'select=id,nom,prenom,specialite,zone_geographique,actif,statut,photo_url&order=nom');
-    } catch(_) {
-      // statut column may not exist yet — retry without it
-      techs = await sbSelect('techniciens', 'select=id,nom,prenom,specialite,zone_geographique,actif,photo_url&order=nom');
-    }
-    if (Array.isArray(techs)) {
+    const techs = await sbSelect('techniciens', 'select=id,nom,prenom,specialite,zone_geographique,actif,statut,photo_url&order=nom');
+    if (Array.isArray(techs) && techs.length > 0) {
       REF_DATA.techniciens = techs;
       const nb = document.getElementById('nb-techniciens');
-      if (nb) nb.textContent = techs.filter(t=>(t.statut ? t.statut==='actif' : t.actif)).length;
+      if (nb) nb.textContent = techs.filter(t=>t.actif).length;
     }
   } catch(e) { console.warn('[REF] techniciens:', e.message); }
 
@@ -5687,25 +5686,12 @@ async function openInterventionModal(id, preDate, preTechId){
   const v = function(f){ return intv ? (intv[f]||'') : ''; };
 
   // Options techniciens (actifs seulement, + assigné actuel si inactif/archivé)
-  // Source techniciens : REF_DATA (priorité) → TECH_STATE (fallback) → fetch direct si tout vide
-  let _mts = (REF_DATA.techniciens && REF_DATA.techniciens.length)
-    ? REF_DATA.techniciens
-    : (TECH_STATE.techniciens && TECH_STATE.techniciens.length ? TECH_STATE.techniciens : null);
-  if(!_mts){
-    try {
-      const _f = await sbSelect('techniciens','select=id,nom,prenom,actif&order=nom');
-      _mts = Array.isArray(_f) ? _f : [];
-      if(_mts.length) REF_DATA.techniciens = _mts;
-    } catch(_){ _mts = []; }
-  }
-  const _aid = intv ? String(intv.technicien_id||'') : '';
-  const _pid = preTechId ? String(preTechId) : '';
-  const techOptions = _mts.filter(function(t){
-    const s = t.statut ? t.statut : (t.actif ? 'actif' : 'inactif');
-    return s==='actif' || (_aid && String(t.id)===_aid);
+  const techOptions = (REF_DATA.techniciens||[]).filter(function(t){
+    const s = t.statut||(t.actif?'actif':'inactif');
+    return s==='actif' || (intv && String(t.id)===String(intv.technicien_id));
   }).map(function(t){
-    const sel = (_pid && String(t.id)===_pid)||(_aid && String(t.id)===_aid) ? ' selected' : '';
-    return '<option value="'+t.id+'"'+sel+'>'+esc(t.prenom)+' '+esc(t.nom)+'</option>';
+    const sel = (preTechId&&String(t.id)===String(preTechId))||(intv&&String(t.id)===String(intv.technicien_id))?'selected':'';
+    return '<option value="'+t.id+'" '+sel+'>'+esc(t.prenom)+' '+esc(t.nom)+'</option>';
   }).join('');
 
   // Options types
@@ -5976,6 +5962,42 @@ function _getSessionToken(){
   // Priorité : JWT session Supabase → sinon anon key
   return sessionStorage.getItem('sb_access_token') || SUPABASE_ANON_KEY || '';
 }
+
+// ── Rafraîchissement automatique du token JWT ─────────────────────────────────
+// Appelle le endpoint Supabase /auth/v1/token?grant_type=refresh_token
+// Déclenché automatiquement toutes les 50 minutes (token expire à 60 min)
+async function _refreshSessionToken(){
+  const refreshToken = sessionStorage.getItem('sb_refresh_token');
+  if(!refreshToken) return false;
+  const cfg = getSupabaseCfg();
+  if(!cfg.url || !cfg.key) return false;
+  try {
+    const resp = await fetch(cfg.url+'/auth/v1/token?grant_type=refresh_token', {
+      method: 'POST',
+      headers: { 'apikey': cfg.key, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ refresh_token: refreshToken })
+    });
+    if(!resp.ok) return false;
+    const data = await resp.json();
+    if(data.access_token){
+      sessionStorage.setItem('sb_access_token',  data.access_token);
+      sessionStorage.setItem('sb_refresh_token', data.refresh_token || refreshToken);
+      console.log('[auth] Token rafraîchi silencieusement ✓');
+      return true;
+    }
+  } catch(e){ console.warn('[auth] Échec rafraîchissement token:', e.message); }
+  return false;
+}
+
+// Lance le renouvellement automatique toutes les 50 minutes
+(function _startTokenRefreshLoop(){
+  const INTERVAL_MS = 50 * 60 * 1000; // 50 min
+  setInterval(async function(){
+    if(!sessionStorage.getItem('sb_refresh_token')) return;
+    const ok = await _refreshSessionToken();
+    if(!ok) console.warn('[auth] Token non renouvelé — re-login requis au prochain accès');
+  }, INTERVAL_MS);
+})();
 
 async function _sbRestUuid(method, table, id, payload){
   const cfg = getSupabaseCfg();
