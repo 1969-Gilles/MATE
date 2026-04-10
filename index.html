@@ -4123,8 +4123,9 @@ async function sbDelete(table, id){
 async function sbUpdate(table, id, row){
   const cfg = getSupabaseCfg();
   if(!cfg.url || !cfg.key) throw new Error('Supabase non configuré');
-  // Use return=minimal: PostgREST returns 204 No Content on success without
-  // needing a SELECT after the PATCH — avoids RLS SELECT-blocking issues.
+  // Utilise le JWT de session si disponible (requis par RLS authenticated),
+  // sinon fallback sur anon key (config service-role sans RLS stricte)
+  const token = sessionStorage.getItem('sb_access_token') || cfg.key;
   const url = cfg.url + '/rest/v1/' + table + '?id=eq.' + id;
   const bodyStr = JSON.stringify(row);
   console.log('[sbUpdate] PATCH', url);
@@ -4133,7 +4134,7 @@ async function sbUpdate(table, id, row){
     method: 'PATCH',
     headers:{
       'apikey':        cfg.key,
-      'Authorization': 'Bearer ' + cfg.key,
+      'Authorization': 'Bearer ' + token,
       'Content-Type':  'application/json',
       'Prefer':        'return=minimal'
     },
